@@ -1,2 +1,2 @@
-git is a distributed version contro system.
+ok
 git is free software
