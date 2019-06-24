@@ -37,7 +37,7 @@
     </div>
     <div class="head-menu">
     	<div class="head-menu-mean flex-start-start">
-    		<router-link :class="{on : login.menu == index}" v-for="(item , index) in menu" :to="item.url">{{item.name}}</router-link>
+    		<router-link :class="{on : login.menu == index}" v-for="(item , index) in menu" :to="item.url" :key="index">{{item.name}}</router-link>
     	</div>
     </div>
   </div>
