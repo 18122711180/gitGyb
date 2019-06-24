@@ -1,2 +1,2 @@
-Git is a distributed version control system.
-Git is free software distributed under the GPL.
+/project/static/css/elastic-box.css
+弹性盒子的基本布局
