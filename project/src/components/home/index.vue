@@ -1,13 +1,14 @@
 <template>
   <div id="home">
-  	<login-head />
   	<my-head :login='login'/>
+  	<right-float />
   	<my-foot />
   </div>
 </template>
 
 <script>
 	import Head from '../public/allHead.vue';
+	import Float from '../public/rightFloat.vue';
 	import Foot from '../public/allFoot.vue';
   export default {
     name: 'home',
@@ -23,6 +24,7 @@
     components: {
       props: ['login'],
       'my-head': Head,
+      'right-float': Float,
       'my-foot': Foot
     },
   }
