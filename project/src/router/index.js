@@ -5,12 +5,18 @@ import Login from '@/components/login/login'
 import Forget from '@/components/login/forget'
 import TelLogin from '@/components/login/telLogin'
 import Home from '@/components/home/index'
+import Notice from '@/components/home/notice'
 
 Vue.use(Router)
 
 export default new Router({
-  routes: [{
+  routes: [
+  {
       path: '/',
+      name: 'Notice',
+      component: Notice
+    }, {
+      path: '/home',
       name: 'Home',
       component: Home
     }, {

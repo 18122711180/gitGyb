@@ -1,12 +1,17 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view :url="url"/>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  data (){
+  	return{
+  		url: 'http://120.79.226.99:8080'
+  	}
+  }
 }
 </script>
 

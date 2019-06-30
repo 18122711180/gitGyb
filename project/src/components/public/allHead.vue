@@ -1,45 +1,51 @@
 <template>
   <div id="allHead">
-    <div class="header">
-      <div class="state">
-        <div class="state-main flex-between-center">
-          <div class="state-main-left flex-start-center">
-            <router-link class="state-main-home" to="/home">共医宝首页</router-link>
-            <span v-if="!areaName.length" @click="dialogVisible = true">深圳</span>
-            <span v-else @click="dialogVisible = true">{{areaName[0]}}-{{areaName[1]}}-{{areaName[2]}}</span>
-          </div>
-          <div class="state-main-right flex-start-center">
-            <template v-if="!login.state">
-              <p>请
-                <router-link to="/home">登录</router-link>
-              </p>
-              <router-link to="/register">免费注册</router-link>
-            </template>
-            <template v-else>
-              <router-link to="/register">{{login.name}}</router-link>
-            </template>
-            <span>|</span>
-            <router-link to="/foo">我的订单</router-link>
-            <router-link to="/foo">商家入驻</router-link>
-            <router-link to="/foo">客户服务</router-link>
+  	<div style="height: 212px;"></div>
+    <div class="head-float">
+      <div class="header">
+        <div class="state">
+          <div class="state-main flex-between-center">
+            <div class="state-main-left flex-start-center">
+              <router-link class="state-main-home" to="/home">共医宝首页</router-link>
+              <span v-if="!areaName.length" @click="dialogVisible = true">深圳</span>
+              <span v-else @click="dialogVisible = true">{{areaName[0]}}-{{areaName[1]}}-{{areaName[2]}}</span>
+            </div>
+            <div class="state-main-right flex-start-center">
+              <template v-if="!login.state">
+                <p>请
+                  <router-link to="/home">登录</router-link>
+                </p>
+                <router-link to="/register">免费注册</router-link>
+              </template>
+              <template v-else>
+                <router-link to="/register">{{login.name}}</router-link>
+              </template>
+              <span>|</span>
+              <router-link to="/foo">我的订单</router-link>
+              <router-link to="/foo">商家入驻</router-link>
+              <router-link to="/foo">客户服务</router-link>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="head-second-bg">
-      <div class="flex-between-center head-second">
-        <img class="head-logo" src="../../../static/img/logo.png" />
-        <div class="head-search flex-start-center">
-          <img src="../../../static/img/icon-search.png" />
-          <input type="" placeholder="请输入医院、名师、专业陪诊、医生、护工、保健食品、药品" />
-          <span>搜索</span>
+      <div class="head-second-bg">
+        <div class="flex-between-center head-second">
+          <img class="head-logo" src="../../../static/img/logo.png" />
+          <div class="head-search flex-start-center">
+            <img src="../../../static/img/icon-search.png" />
+            <input v-model="searchVal" placeholder="请输入医院、名师、专业陪诊、医生、护工、保健食品、药品" />
+            <span @click="search">搜索</span>
+          </div>
+          <img class="head-ad" src="../../../static/img/jz.png" />
         </div>
-        <img class="head-ad" src="../../../static/img/jz.png" />
       </div>
-    </div>
-    <div class="head-menu">
-      <div class="head-menu-mean flex-start-start">
-        <router-link :class="{on : login.menu == index}" v-for="(item , index) in menu" :to="item.url" :key="index">{{item.name}}</router-link>
+      <div class="head-menu">
+        <div class="head-menu-mean flex-start-start" v-if="!login.searchShow">
+          <router-link :class="{on : login.menu == index}" v-for="(item , index) in menu" :to="item.url" :key="index">{{item.name}}</router-link>
+        </div>
+        <div class="head-menu-mean flex-start-start" v-else>
+          <router-link :class="{on : login.menu == index}" v-for="(item , index) in menu2" to="" :key="index">{{item.name}}</router-link>
+        </div>
       </div>
     </div>
     <el-dialog title="地区选择" :visible.sync="dialogVisible">
@@ -54,10 +60,12 @@
 
 <script>
   import placeJs from '../../../static/js/place.js';
+  const axios = require('axios');
   export default {
     name: 'allHead',
     props: {
-      login: ''
+      login: '',
+      url: ''
     },
     data() {
       return {
@@ -98,7 +106,45 @@
             url: '/home'
           }
         ],
+        menu2: [{
+            id: 1,
+            name: '医院'
+          },
+          {
+            id: 2,
+            name: '私人医生'
+          },
+          {
+            id: 3,
+            name: '陪诊员'
+          },
+          {
+            id: 4,
+            name: '医辅名师'
+          },
+          {
+            id: 5,
+            name: '护工陪护'
+          },
+          {
+            id: 6,
+            name: '健康资讯'
+          },
+          {
+            id: 7,
+            name: '保健食品'
+          },
+          {
+            id: 8,
+            name: '医疗器械'
+          },
+          {
+            id: 9,
+            name: '药品'
+          }
+        ],
         dialogVisible: false,
+        searchVal: [],
         areaData: areajson, // 省市区json
         areaId: [], //省市区id
         areaName: [] //省市区名字
@@ -108,6 +154,35 @@
       handleChange: function(item) {
         var that = this
         that.areaName = that.palceSelect(item)
+      },
+      search: function() {
+        var that = this
+        //that.login.menu
+        that.$router.push({
+          path: '/'
+        })
+        //      axios.post(
+        //          that.login.url + '/yiqi-api/api/shop/merchantenter', {
+        //
+        //          }, {
+        //            headers: {
+        //              'Content-Type': 'application/json'
+        //            }
+        //          }
+        //        )
+        //        .then(function(res) {
+        //          console.log(res)
+        //          if(res.data.code == 0) {
+        //            sessionStorage.setItem('searchSubmit', that.searchVal)
+        //            
+        //          } else {
+        //            
+        //          }
+        //
+        //        })
+        //        .catch(function(error) {
+        //          console.log(error);
+        //        });
       },
       palceSelect(item) {
         var that = this
@@ -134,7 +209,7 @@
 </script>
 
 <style>
-  .header {
+  .head-float {
     position: fixed;
     left: 0;
     top: 0;
@@ -212,7 +287,6 @@
   }
   
   .head-second-bg {
-    margin-top: 40px;
     background-color: #fff;
     ;
   }
@@ -291,7 +365,7 @@
     background-color: #ff6736;
   }
   
-  .area{
-  	width: 300px;
+  .area {
+    width: 300px;
   }
 </style>
