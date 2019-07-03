@@ -181,31 +181,31 @@
           ],
           health: [{
               url: '',
-              img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
+              img: '../../../static/img/health-1.png',
               name: '名医榜',
               introduce: '私人定制 安全放心'
             },
             {
               url: '',
-              img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
+              img: '../../../static/img/health-2.png',
               name: '私人医生',
               introduce: '私人定制 安全放心'
             },
             {
               url: '',
-              img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
+              img: '../../../static/img/health-3.png',
               name: '医辅名师',
               introduce: '私人定制 安全放心'
             },
             {
               url: '',
-              img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
+              img: '../../../static/img/health-4.png',
               name: '专业陪诊',
               introduce: '私人定制 安全放心'
             },
             {
               url: '',
-              img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
+              img: '../../../static/img/health-5.png',
               name: '健康咨询',
               introduce: '私人定制 安全放心'
             }
@@ -241,19 +241,19 @@
           ],
           nursingList2: [{
               id: 1,
-              img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
+              img: '../../../static/img/nurse-1.png',
               name: '家庭陪护',
               introduce: '免排队 方便快捷'
             },
             {
               id: 2,
-              img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
+              img: '../../../static/img/nurse-2.png',
               name: '医院陪护',
               introduce: '免排队 方便快捷'
             },
             {
               id: 3,
-              img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
+              img: '../../../static/img/nurse-3.png',
               name: '母婴陪护',
               introduce: '免排队 方便快捷'
             }

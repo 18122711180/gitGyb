@@ -14,13 +14,13 @@
         <div class="login-left-main">
           <el-form ref="form" :model="form">
             <div class="login-left-input">
-              <div class="flex-center-center login-left-input-img"><img src="" /></div>
+              <div class="flex-center-center login-left-input-img"><img src="../../../static/img/icon-personal.png" /></div>
               <el-form-item class="login-left-input-main">
                 <el-input v-model="form.tel" placeholder="请输入手机号"></el-input>
               </el-form-item>
             </div>
             <div class="login-left-input">
-              <div class="flex-center-center login-left-input-img"><img src="" /></div>
+              <div class="flex-center-center login-left-input-img"><img src="../../../static/img/icon-password.png" /></div>
               <el-form-item class="login-left-input-main">
                 <el-input v-model="form.psd" placeholder="请输入密码" show-password></el-input>
               </el-form-item>
@@ -151,6 +151,11 @@
     background-color: #f3f3f3;
     border-radius: 4px 0 0 4px;
     z-index: 22;
+  }
+  
+  .login-left-input-img img{
+  	width: 100%;
+  	height: 100%;
   }
   
   .login-left-forget{
