@@ -1,5 +1,5 @@
 <template>
-  <div id="famousDetail">
+  <div id="physicianDetail">
     <my-head :login='login' />
     <section>
       <div class="doctor-top flex-between-start">
@@ -15,36 +15,23 @@
             <div class="doctor-basice flex-start-center">
               <span>{{doctor.name}}</span>
               <span>{{doctor.sex}}</span>
-              <span>{{doctor.level}}</span>
+              <span>{{doctor.age}}岁</span>
               <p class="flex-start-center">
-                <span class="doctor-basice-state" :class="{on : doctor.state}">{{doctor.state ? "在线" : "离线"}}</span>
-                <span class="doctor-basice-follow">{{doctor.follow ? "已关注" : "关注"}}</span>
+                <span class="doctor-basice-state" :class="{on : doctor.state}">{{doctor.state ? "忙" : "闲"}}</span>
               </p>
             </div>
             <div class="doctor-other">
-              <p><span>内科：</span>{{doctor.type}}</p>
-              <p>{{doctor.address}}</p>
-              <p><span>擅长：</span>{{doctor.goodAt}}</p>
+              <p><span>所属公司：</span>{{doctor.company}}</p>
+              <p><span>月销量：</span>{{doctor.sales}}</p>
               <p>
                 <span>服务价格：</span>
                 <span class="price">￥{{doctor.servicePrice}}</span>
               </p>
-              <div class="doctor-other-amount flex-start-center">
-                <p>选择数量：</p>
-                <input type="number" v-model="amount" @change="amountChange" />
-                <p>本月仅剩{{doctor.surplus}}个服务名额，预估从速</p>
-              </div>
               <p>选择服务：</p>
               <div class="doctor-other-service flex-start-start flex-wrap">
                 <span v-for="(item, index) in serviceData" :class="{on : serviceType == index}" @click="serviceType = index">{{item}}</span>
               </div>
-              <template v-if="serviceType == 4">
-              	<p>计时计价： 
-              		<span style="font-size: 12px;color: #ff6736;">（*超时以20分钟为一单位，加收百分之二十的服务费，不足20分钟，按20分钟计算*）</span>
-              	</p>
-              	<div class="doctor-other-service flex-start-start flex-wrap">
-	                <span v-for="(item, index) in serviceTimeData" :class="{on : serviceTimeType == index}" @click="serviceTimeType = index">{{item}}</span>
-	              </div>
+              <template v-if="serviceType == 0">
 	              <p>选择服务时间：</p>
 	              <div class="doctor-service-time">
 	              	<el-date-picker
@@ -52,14 +39,6 @@
 							      type="datetime"
 							      placeholder="选择日期时间">
 							    </el-date-picker>
-	              </div>
-	              <p>选择服务：</p>
-	              <div class="doctor-other-service flex-start-start flex-wrap">
-	                <span v-for="(item, index) in serviceData2" :class="{on : serviceType2 == index}" @click="serviceType2 = index">{{item}}</span>
-	              </div>
-	              <p>需要医用耗材：</p>
-	              <div class="doctor-other-service flex-start-start flex-wrap">
-	                <span v-for="(item, index) in serviceData3" :class="{on : serviceType3 == index}" @click="serviceType3 = index">{{item}}</span>
 	              </div>
               </template>
             </div>
@@ -82,12 +61,9 @@
           <span :class="{on : doctorDetailType == 2}" @click="doctorDetailType = 2">评价</span>
         </div>
         <template v-if="doctorDetailType == 1">
-          <div class="doctor-bottom-time flex-center-center">
-            <p><span>工作时间:</span>{{doctor.timeWeek}}</p>
-            <p><span>上午:</span>{{doctor.timeAm}}</p>
-            <p><span>下午:</span>{{doctor.timePm}}</p>
+          <div class="doctor-bottom-time flex-start-center">
+          	<span v-for="(item,index) in physicianTypeData" :class="{on : physicianType == index}" @click="physicianType = index">{{item}}</span>
           </div>
-          <h3 class="title">个人简介</h3>
           <div class="doctor-bottom-introduce">
           	<p>服务</p>
           </div>
@@ -159,27 +135,16 @@
         },
         serviceType: 0,
         serviceData: [
-        	'单次服务',
-        	'月卡服务',
-        	'季卡服务',
-        	'年卡服务',
-        	'上门服务'
+        	'上门服务',
+        	'到店服务'
         ],
-        serviceTimeType: 0,
-        serviceTimeData: [
-        	'常规一小时',
-        	'超时20分钟'
-        ],
-        serviceType2: 0,
-        serviceData2: [
-        	'输液',
-        	'输液',
-        	'输液'
-        ],
-        serviceType3: 0,
-        serviceData3: [
-        	'是',
-        	'否',
+        physicianType: 0,
+        physicianTypeData: [
+        	'产后开奶',
+        	'追奶',
+        	'通乳',
+        	'特殊乳房护理',
+        	'离乳'
         ],
         amount: 1,
         doctorDetailType: 1,
@@ -191,13 +156,10 @@
           evaluate: '98',
           name: '韩冬梅',
           sex: '女',
-          level: '主治医师',
-          type: '妇产科&生殖中心',
-          address: '江西赣州市立医院',
-          follow: false,
-          goodAt: '擅长口腔种植手术、口腔正畸治疗、复杂埋伏阻生牙的拔出、复杂根治生牙的拔出、复杂根治牙的大拔疗、牙周序列治疗、口腔黏膜病的诊断治疗。',
+          age: '35',
+          company: '所属公司名称所属公',
+          sales: '90',
           servicePrice: '69.00',
-          surplus: 3,
           hospital: '江西赣州市立医院',
           tel: '0755-1234567',
           address: '深圳市南山区东滨路xxxx南山人民医院',
@@ -268,7 +230,7 @@
 </script>
 
 <style scoped>
-  #famousDetail {
+  #physicianDetail {
     background-color: #fff;
   }
   
@@ -511,18 +473,19 @@
   }
   
   .doctor-bottom-time {
-    height: 50px;
-    font-size: 18px;
-    color: #666;
+    height: 56px;
     border-bottom: solid 1px #f1f1f1;
   }
   
-  .doctor-bottom-time p+p {
-    margin-left: 40px;
+  .doctor-bottom-time span{
+  	font-size: 20px;
+    color: #666;
+    margin: 0 30px 0 20px;
+    cursor: pointer;
   }
   
-  .doctor-bottom-time p span {
-    color: #999;
+  .doctor-bottom-time span.on{
+  	color: #ff6736;
   }
   
   .doctor-bottom h3.title{

@@ -75,7 +75,7 @@
           },
           {
             name: '健康咨询',
-            url: '/home'
+            url: '/consult'
           },
           {
             name: '护工陪护',

@@ -43,7 +43,7 @@
         login: {
           state: true,
           name: 'hhy',
-          menu: 0,
+          menu: 1,
           searchShow: false,
           url: this.url
         },

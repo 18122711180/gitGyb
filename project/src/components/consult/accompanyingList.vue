@@ -1,53 +1,35 @@
 <template>
-  <div id="consultDoctor">
+  <div id="accompanyingList">
     <my-head :login='login'></my-head>
     <section>
-      <div class="doctor-type flex-start-center">
-        <span class="doctor-type-title">分类：</span>
-        <div class="flex-start-start doctor-type-main">
-          <span :class="{ on : doctorType == 1}" @click="doctorType = 1">全部</span>
-          <span :class="{ on : doctorType == 2}" @click="doctorType = 2">临床名医</span>
-          <span :class="{ on : doctorType == 3}" @click="doctorType = 3">临床药师</span>
-        </div>
-      </div>
-      <div style="padding-top: 0;" class="doctor-type flex-start-start" v-if="doctorType == 2">
-        <span class="doctor-type-title">选择科室：</span>
-        <div class="doctor-department">
-          <div class="flex-start-start">
-            <span :class="{ on : departmentType == 1}" @click="departmentType = 1">外科</span>
-            <span :class="{ on : departmentType == 2}" @click="departmentType = 2">专科</span>
-            <span :class="{ on : departmentType == 3}" @click="departmentType = 3">非临床</span>
-          </div>
-          <div class="flex-start-start flex-wrap">
-            <span v-for="item in departmentList" :class="{ on : departmentListType == item.id}" @click="departmentListType = item.id">
-	      			{{item.name}}
-	      		</span>
-          </div>
-        </div>
-      </div>
       <div class="float-doctor-main">
-        <div class="float-doctor-message flex-start-start" v-for="(item , index) in doctorList" :key="index">
+      	<router-link :to="{ path: '/accompanying/detail', query: { id: item.id }}" class="float-doctor-message flex-start-start" v-for="(item , index) in doctorList" :key="index">
           <div class="float-doctor-message-left">
             <img :src="item.img" />
           </div>
           <div class="doctor-list-main">
             <div class="doctor-list-basic flex-start-center">
               <span>{{item.name}}</span>
+              <span>{{item.age}}岁</span>
               <span>{{item.sex}}</span>
               <span>{{item.level}}</span>
-              <span class="float-doctor-follow" :class="{on : item.state}">{{item.state ? "在线" : "离线"}}</span>
+              <span class="float-doctor-follow" :class="{on : item.state}">{{item.state ? "忙" : "闲"}}</span>
+              <div class="flex-start-center doctor-basice-score">
+              	<img v-for="(img, idx) in 5" :src="item.score > idx ? '../../../static/img/star-on.png' : '../../../static/img/star-off.png'" />
+              </div>
             </div>
             <div class="doctor-list-message">
-              <p>内科:{{item.type}}</p>
-              <p>{{item.address}}</p>
-              <p>擅长：{{item.goodAt}}</p>
+              <p>所属公司:<span>{{item.company}}</span></p>
+              <p>所服务医院:<span>{{item.address}}</span></p>
+              <p>养老护理员证:<span>{{item.cardState1? "有" : "无"}}</span> 健康证:<span>{{item.cardState2? "有" : "无"}}</span></p>
+              <p>护龄<span>{{item.workTime}}年</span></p>
             </div>
           </div>
           <div class="float-doctor-message-right flex-start-start">
-          	<span>从业{{item.workTime}}年</span>
+          	<span>服务{{item.serviceTime}}次</span>
           	<span>好评率{{item.evaluate}}%</span>
           </div>
-        </div>
+        </router-link>
       </div>
       <div class="search-page flex-center-start" v-if="pageTotal>10">
         <el-pagination background @current-change="pageChange" layout="prev, pager, next" :total="pageTotal">
@@ -64,7 +46,7 @@
   import Float from '../public/rightFloat.vue';
   import Foot from '../public/allFoot.vue';
   export default {
-    name: 'consultDoctor',
+    name: 'accompanyingList',
     props: {
       url: ''
     },
@@ -77,57 +59,21 @@
           searchShow: false,
           url: this.url
         },
-        doctorType: 1,
-        departmentType: 1,
-        departmentListType: '',
         pageTotal: 60,
-        departmentList: [{
-            id: 12,
-            name: '南山肥胖减重门诊'
-          },
-          {
-            id: 13,
-            name: '南山肥胖减重门诊'
-          },
-          {
-            id: 14,
-            name: '南山肥胖减重门诊'
-          },
-          {
-            id: 15,
-            name: '南山肥胖减重门诊'
-          },
-          {
-            id: 16,
-            name: '南山肥胖减重门诊'
-          },
-          {
-            id: 17,
-            name: '南山肥胖减重门诊'
-          },
-          {
-            id: 18,
-            name: '南山肥胖减重门诊'
-          },
-          {
-            id: 19,
-            name: '南山肥胖减重门诊'
-          },
-          {
-            id: 20,
-            name: '南山肥胖减重门诊'
-          }
-        ],
         doctorList: [{
           id: 1,
           img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
           name: '韩冬梅',
           sex: '女',
+          age: '30',
           level: '主治医师',
-          type: '妇产科&生殖中心',
+          company: '所属陪护公司名称',
+          score: 5,
           address: '江西赣州市立医院',
-          goodAt: '骨性牙列不齐，各种正畸技术',
+          cardState1: true,
+          cardState2: true,
           workTime: '12',
+          serviceTime: '87',
           evaluate: '98',
           state: false
         }, {
@@ -135,11 +81,15 @@
           img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
           name: '韩冬梅',
           sex: '女',
+          age: '30',
           level: '主治医师',
-          type: '妇产科&生殖中心',
+          company: '所属陪护公司名称',
+          score: 5,
           address: '江西赣州市立医院',
-          goodAt: '骨性牙列不齐，各种正畸技术',
+          cardState1: true,
+          cardState2: true,
           workTime: '12',
+          serviceTime: '87',
           evaluate: '98',
           state: false
         }, {
@@ -147,22 +97,15 @@
           img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
           name: '韩冬梅',
           sex: '女',
+          age: '30',
           level: '主治医师',
-          type: '妇产科&生殖中心',
+          company: '所属陪护公司名称',
+          score: 5,
           address: '江西赣州市立医院',
-          goodAt: '骨性牙列不齐，各种正畸技术',
+          cardState1: true,
+          cardState2: true,
           workTime: '12',
-          evaluate: '98'
-        }, {
-          id: 1,
-          img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
-          name: '韩冬梅',
-          sex: '女',
-          level: '主治医师',
-          type: '妇产科&生殖中心',
-          address: '江西赣州市立医院',
-          goodAt: '骨性牙列不齐，各种正畸技术',
-          workTime: '12',
+          serviceTime: '87',
           evaluate: '98',
           state: false
         }, {
@@ -170,11 +113,15 @@
           img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
           name: '韩冬梅',
           sex: '女',
+          age: '30',
           level: '主治医师',
-          type: '妇产科&生殖中心',
+          company: '所属陪护公司名称',
+          score: 5,
           address: '江西赣州市立医院',
-          goodAt: '骨性牙列不齐，各种正畸技术',
+          cardState1: true,
+          cardState2: true,
           workTime: '12',
+          serviceTime: '87',
           evaluate: '98',
           state: false
         }, {
@@ -182,11 +129,15 @@
           img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
           name: '韩冬梅',
           sex: '女',
+          age: '30',
           level: '主治医师',
-          type: '妇产科&生殖中心',
+          company: '所属陪护公司名称',
+          score: 5,
           address: '江西赣州市立医院',
-          goodAt: '骨性牙列不齐，各种正畸技术',
+          cardState1: true,
+          cardState2: true,
           workTime: '12',
+          serviceTime: '87',
           evaluate: '98',
           state: false
         }, {
@@ -194,11 +145,15 @@
           img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
           name: '韩冬梅',
           sex: '女',
+          age: '30',
           level: '主治医师',
-          type: '妇产科&生殖中心',
+          company: '所属陪护公司名称',
+          score: 5,
           address: '江西赣州市立医院',
-          goodAt: '骨性牙列不齐，各种正畸技术',
+          cardState1: true,
+          cardState2: true,
           workTime: '12',
+          serviceTime: '87',
           evaluate: '98',
           state: false
         }, {
@@ -206,13 +161,33 @@
           img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
           name: '韩冬梅',
           sex: '女',
+          age: '30',
           level: '主治医师',
-          type: '妇产科&生殖中心',
+          company: '所属陪护公司名称',
+          score: 5,
           address: '江西赣州市立医院',
-          goodAt: '骨性牙列不齐，各种正畸技术',
+          cardState1: true,
+          cardState2: true,
           workTime: '12',
+          serviceTime: '87',
           evaluate: '98',
-          state: true
+          state: false
+        }, {
+          id: 1,
+          img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
+          name: '韩冬梅',
+          sex: '女',
+          age: '30',
+          level: '主治医师',
+          company: '所属陪护公司名称',
+          score: 5,
+          address: '江西赣州市立医院',
+          cardState1: true,
+          cardState2: true,
+          workTime: '12',
+          serviceTime: '87',
+          evaluate: '98',
+          state: false
         }]
       }
     },
@@ -231,7 +206,7 @@
 </script>
 
 <style scoped>
-  #consultDoctor {
+  #accompanyingList {
     background-color: #fff;
   }
   
@@ -342,10 +317,24 @@
   	background-color: #ff6736;
   }
   
+  .doctor-basice-score{
+  	margin-left: 30px;
+  }
+  
+  .doctor-basice-score img{
+  	width: 18px;
+  	height: 18px;
+  	margin-right: 5px;
+  }
+  
   .doctor-list-message p{
   	margin-top: 10px;
   	font-size: 16px;
   	color: #999;
+  }
+  
+  .doctor-list-message span{
+  	color: #666;
   }
   
   .float-doctor-message-right span{

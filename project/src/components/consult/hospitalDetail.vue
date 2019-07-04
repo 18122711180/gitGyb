@@ -121,7 +121,7 @@
         login: {
           state: true,
           name: 'hhy',
-          menu: 0,
+          menu: 1,
           searchShow: false,
           url: this.url
         },
@@ -475,6 +475,7 @@
     top: 19px;
     width: 16px;
     height: 16px;
+    cursor: pointer;
   }
   
    ::-webkit-scrollbar {
@@ -546,6 +547,7 @@
     color: #fff;
     background-color: #27b5b1;
     border-radius: 25px;
+    cursor: pointer;
   }
   
   .float-doctor-introudce {
