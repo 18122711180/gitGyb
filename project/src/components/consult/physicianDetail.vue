@@ -10,6 +10,7 @@
               <span>从业{{doctor.workTime}}年</span>
               <span>好评率{{doctor.evaluate}}%</span>
             </p>
+            <p><span class="follow" :class="{on: follow}" @click="follow = !follow">{{follow ? "已关注" : "关注"}}</span></p>
           </div>
           <div class="doctor-message">
             <div class="doctor-basice flex-start-center">
@@ -17,7 +18,7 @@
               <span>{{doctor.sex}}</span>
               <span>{{doctor.age}}岁</span>
               <p class="flex-start-center">
-                <span class="doctor-basice-state" :class="{on : doctor.state}">{{doctor.state ? "忙" : "闲"}}</span>
+                <span class="doctor-basice-state" :class="{on : doctor.state}">{{doctor.state ? "空闲" : "忙碌"}}</span>
               </p>
             </div>
             <div class="doctor-other">
@@ -150,6 +151,7 @@
         doctorDetailType: 1,
         evaluateType: 1,
         serviceDate: '',
+        follow: false,
         doctor: {
           img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
           workTime: '12',
@@ -273,6 +275,25 @@
   .doctor-basice {
     font-size: 18px;
     color: #333;
+  }
+  
+  .follow{
+  	display: inline-block;
+  	width: 80px;
+  	height: 30px;
+  	line-height: 30px;
+  	text-align: center;
+  	font-size: 14px;
+  	color: #fff;
+  	border-radius: 30px;
+  	border: solid 1px #27b5b1;
+  	background-color: #27b5b1;
+  	cursor: pointer;
+  }
+  
+  .follow.on{
+  	color: #27b5b1;
+  	background-color: #fff;
   }
   
   .doctor-basice span+span {

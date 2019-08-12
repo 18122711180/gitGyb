@@ -1,12 +1,12 @@
 <template>
   <div id="allHead">
-  	<div style="height: 212px;"></div>
+  	<div :style="{'height' :  login.orderShow ? '162px' : '212px'}"></div>
     <div class="head-float">
       <div class="header">
         <div class="state">
           <div class="state-main flex-between-center">
             <div class="state-main-left flex-start-center">
-              <router-link class="state-main-home" to="/home">共医宝首页</router-link>
+              <router-link class="state-main-home" to="/">共医宝首页</router-link>
               <span v-if="!areaName.length" @click="dialogVisible = true">深圳</span>
               <span v-else @click="dialogVisible = true">{{areaName[0]}}-{{areaName[1]}}-{{areaName[2]}}</span>
             </div>
@@ -21,7 +21,7 @@
                 <router-link to="/register">{{login.name}}</router-link>
               </template>
               <span>|</span>
-              <router-link to="/foo">我的订单</router-link>
+              <router-link to="/order">我的订单</router-link>
               <router-link to="/foo">商家入驻</router-link>
               <router-link to="/foo">客户服务</router-link>
             </div>
@@ -39,12 +39,12 @@
           <img class="head-ad" src="../../../static/img/jz.png" />
         </div>
       </div>
-      <div class="head-menu">
+      <div class="head-menu" v-if="!login.orderShow">
         <div class="head-menu-mean flex-start-start" v-if="!login.searchShow">
           <router-link :class="{on : login.menu == index}" v-for="(item , index) in menu" :to="item.url" :key="index">{{item.name}}</router-link>
         </div>
         <div class="head-menu-mean flex-start-start" v-else>
-          <router-link :class="{on : login.menu == index}" v-for="(item , index) in menu2" to="" :key="index">{{item.name}}</router-link>
+          <router-link :class="{on : login.menu == index}" v-for="(item , index) in menu2" :to="item.url" :key="index">{{item.name}}</router-link>
         </div>
       </div>
     </div>
@@ -71,76 +71,85 @@
       return {
         menu: [{
             name: '首页',
-            url: '/home'
+            url: '/'
           },
           {
             name: '健康咨询',
-            url: '/consult'
+            url: '/consult/index'
           },
           {
             name: '护工陪护',
-            url: '/home'
+            url: '/nurse/index'
           },
           {
             name: '特诊社区',
-            url: '/home'
+            url: '/community/index'
           },
           {
             name: '月子会所',
-            url: '/home'
+            url: '/confinement/index'
           },
           {
             name: '健康商城',
-            url: '/home'
+            url: '/health/index'
           },
           {
             name: '购药信息',
-            url: '/home'
+            url: '/drug/index'
           },
           {
             name: '医疗器械',
-            url: '/home'
+            url: '/military/index'
           },
           {
             name: '保健食品',
-            url: '/home'
+            url: '/food/index'
           }
         ],
         menu2: [{
             id: 1,
-            name: '医院'
+            name: '医院',
+            url: '/hospital'
           },
           {
             id: 2,
-            name: '私人医生'
+            name: '私人医生',
+            url: '/private'
           },
           {
             id: 3,
-            name: '陪诊员'
+            name: '陪诊员',
+            url: '/accompanying'
           },
           {
             id: 4,
-            name: '医辅名师'
+            name: '医辅名师',
+            url: '/physician'
           },
           {
             id: 5,
-            name: '护工陪护'
+            name: '护工陪护',
+            url: '/nurse'
           },
           {
             id: 6,
-            name: '健康资讯'
+            name: '健康资讯',
+            url: '/consult'
           },
           {
             id: 7,
-            name: '保健食品'
+            name: '保健食品',
+            url: '/food'
           },
           {
             id: 8,
-            name: '医疗器械'
+            name: '医疗器械',
+            url: '/military'
           },
           {
             id: 9,
-            name: '药品'
+            name: '药品',
+            url: '/drug'
           }
         ],
         dialogVisible: false,
@@ -157,7 +166,7 @@
       },
       search: function() {
         var that = this
-        //that.login.menu
+       	console.log(that.login.menu)
         that.$router.push({
           path: '/'
         })

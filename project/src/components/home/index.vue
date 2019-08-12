@@ -21,7 +21,7 @@
             <div class="notice-right-main">
               <ul>
                 <li v-for="item in home.noticeList">
-                  <router-link class="flex-between-center" :to="{ path: '/noticeDatail', query: { id: item.id }}">
+                  <router-link class="flex-between-center" :to="{ path: '/consult/detail', query: { id: item.id }}">
                     <p>{{item.text}}</p>
                     <span>{{item.time}}</span>
                   </router-link>

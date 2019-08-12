@@ -3,7 +3,7 @@
     <my-head :login='login' />
     <section>
       <div class="notice-menu flex-start-start flex-column">
-        <span v-for="(item, index) in noticeMenu" :class="{on : noticeMenuType == index}">{{item}}</span>
+        <span v-for="(item, index) in noticeMenu" :class="{on : noticeMenuType == index}" @click="noticeMenuType = index">{{item}}</span>
       </div>
       <div class="notice-list">
         <notice-list :list="noticeList"></notice-list>
@@ -47,7 +47,7 @@
             type: '生活健康',
             consult: '咨询人发布信息',
             date: '2019-4-26',
-            timeL: '19:01'
+            time: '19:01'
           },
           {
             img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
@@ -56,7 +56,7 @@
             type: '生活健康',
             consult: '咨询人发布信息',
             date: '2019-4-26',
-            timeL: '19:01'
+            time: '19:01'
           },
           {
             img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
@@ -65,7 +65,7 @@
             type: '生活健康',
             consult: '咨询人发布信息',
             date: '2019-4-26',
-            timeL: '19:01'
+            time: '19:01'
           },
           {
             img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
@@ -74,7 +74,7 @@
             type: '生活健康',
             consult: '咨询人发布信息',
             date: '2019-4-26',
-            timeL: '19:01'
+            time: '19:01'
           },
           {
             img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
@@ -83,7 +83,7 @@
             type: '生活健康',
             consult: '咨询人发布信息',
             date: '2019-4-26',
-            timeL: '19:01'
+            time: '19:01'
           }
         ]
       }

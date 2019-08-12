@@ -1,7 +1,7 @@
 <template>
   <div id="noticeList">
     <div class="notice-list" v-for="(item , index) in list" :key="index">
-      <router-link class="flex-start-start" to="/">
+      <router-link class="flex-start-start" :to="{ path: '/consult/detail', query: { id: item.id }}">
         <img class="notice-list-left" :src="item.img" />
         <div class="notice-list-right flex-between-start flex-column">
           <div class="notice-list-right-main">
@@ -33,7 +33,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .notice-list {
     width: 100%;
   }
@@ -58,6 +58,10 @@
     flex: 1;
     min-width: 0;
     height: 150px;
+  }
+  
+  .notice-list a:hover .notice-list-right-main h3{
+  	color: #ff6736;
   }
   
   .notice-list-right-main {

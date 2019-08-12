@@ -354,8 +354,9 @@
   	line-height: 40px;
   	text-align: center;
   	font-size: 16px;
-  	color: #fff;
-  	background-color: #ff6736;
+  	color: #ff6736;
+  	background-color: #fff;
+  	border: solid 1px #ff6736;
   	border-radius: 40px;
   }
   

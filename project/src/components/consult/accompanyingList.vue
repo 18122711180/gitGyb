@@ -10,8 +10,8 @@
           <div class="doctor-list-main">
             <div class="doctor-list-basic flex-start-center">
               <span>{{item.name}}</span>
-              <span>{{item.age}}岁</span>
               <span>{{item.sex}}</span>
+              <span>{{item.age}}岁</span>
               <span>{{item.level}}</span>
               <span class="float-doctor-follow" :class="{on : item.state}">{{item.state ? "忙" : "闲"}}</span>
               <div class="flex-start-center doctor-basice-score">
@@ -343,8 +343,8 @@
   	line-height: 40px;
   	text-align: center;
   	font-size: 16px;
-  	color: #fff;
-  	background-color: #ff6736;
+  	color: #ff6736;
+  	border: solid 1px #ff6736;
   	border-radius: 40px;
   }
   

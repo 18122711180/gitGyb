@@ -23,7 +23,7 @@
               <span>{{item.name}}</span>
               <span>{{item.sex}}</span>
               <span>{{item.age}}岁</span>
-              <span class="float-doctor-follow" :class="{on : item.state}">{{item.state ? "忙" : "闲"}}</span>
+              <span class="float-doctor-follow" :class="{on : item.state}">{{item.state ? "空闲" : "忙碌"}}</span>
             </div>
             <div class="doctor-list-message">
               <p>所属公司:<span>{{item.company}}</span></p>
@@ -245,8 +245,9 @@
     line-height: 40px;
     text-align: center;
     font-size: 16px;
-    color: #fff;
-    background-color: #ff6736;
+    color: #ff6736;
+    border: solid 1px #ff6736;
+    background-color: #fff;
     border-radius: 40px;
   }
   

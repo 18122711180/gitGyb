@@ -19,6 +19,7 @@
         <el-pagination background @current-change="pageChange" layout="prev, pager, next" :total="pageTotal">
         </el-pagination>
       </div>
+      <search-empty v-if="!hospitalList.length"/>
     </section>
     <right-float />
     <my-foot />
@@ -29,6 +30,7 @@
   import Head from '../public/allHead.vue';
   import Float from '../public/rightFloat.vue';
   import Foot from '../public/allFoot.vue';
+  import searchEmpty from '../public/searchEmpty.vue';
   export default {
     name: 'hospital',
     props: {
@@ -87,6 +89,7 @@
       props: ['login'],
       'my-head': Head,
       'right-float': Float,
+      'search-empty': searchEmpty,
       'my-foot': Foot
     },
     methods: {

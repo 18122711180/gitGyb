@@ -10,6 +10,7 @@
               <span>从业{{doctor.workTime}}年</span>
               <span>好评率{{doctor.evaluate}}%</span>
             </p>
+            <p><span class="follow" :class="{on: doctor.follow}" @click="doctor.follow = !doctor.follow">{{doctor.follow ? "已关注" : "关注"}}</span></p>
           </div>
           <div class="doctor-message">
             <div class="doctor-basice flex-start-center">
@@ -18,7 +19,6 @@
               <span>{{doctor.level}}</span>
               <p class="flex-start-center">
                 <span class="doctor-basice-state" :class="{on : doctor.state}">{{doctor.state ? "在线" : "离线"}}</span>
-                <span class="doctor-basice-follow">{{doctor.follow ? "已关注" : "关注"}}</span>
               </p>
             </div>
             <div class="doctor-other">
@@ -289,6 +289,25 @@
   .doctor-evaluate {
     width: 160px;
     margin-right: 20px;
+  }
+  
+  .follow{
+  	display: inline-block;
+  	width: 80px;
+  	height: 30px;
+  	line-height: 30px;
+  	text-align: center;
+  	font-size: 14px;
+  	color: #fff;
+  	border-radius: 30px;
+  	border: solid 1px #27b5b1;
+  	background-color: #27b5b1;
+  	cursor: pointer;
+  }
+  
+  .follow.on{
+  	color: #27b5b1;
+  	background-color: #fff;
   }
   
   .doctor-evaluate img {

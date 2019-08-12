@@ -10,26 +10,27 @@
               <span>服务{{doctor.serviceTime}}次</span>
               <span>好评率{{doctor.evaluate}}%</span>
             </p>
+            <div class="flex-start-center doctor-basice-score">
+              <img v-for="(img, idx) in 5" :src="doctor.score > idx ? '../../../static/img/star-on.png' : '../../../static/img/star-off.png'" />
+            </div>
+            <p><span class="follow" :class="{on: follow}" @click="follow = !follow">{{follow ? "已关注" : "关注"}}</span></p>
           </div>
           <div class="doctor-message">
             <div class="doctor-basice flex-start-center">
               <span>{{doctor.name}}</span>
-              <span>{{doctor.age}}岁</span>
               <span>{{doctor.sex}}</span>
+              <span>{{doctor.age}}岁</span>
               <span>{{doctor.level}}</span>
               <p class="flex-start-center">
                 <span class="doctor-basice-state" :class="{on : doctor.state}">{{doctor.state ? "忙" : "闲"}}</span>
               </p>
-              <div class="flex-start-center doctor-basice-score">
-                <img v-for="(img, idx) in 5" :src="doctor.score > idx ? '../../../static/img/star-on.png' : '../../../static/img/star-off.png'" />
-              </div>
             </div>
             <div class="doctor-other">
               <p><span>所属公司：</span>{{doctor.company}}</p>
-              <p><span>所服务医院</span>{{doctor.address}}</p>
-              <p><span>养老护理员证</span>{{doctor.cardState1 ? "有" : "无"}}<span>健康证</span>{{doctor.cardState2 ? "有" : "无"}}</p>
-              <p><span>护龄</span>{{doctor.workTime}}</p>
-              <p><span>服务类型</span>{{doctor.Type}}</p>
+              <p><span>所服务医院：</span>{{doctor.address}}</p>
+              <p><span>养老护理员证：</span>{{doctor.cardState1 ? "有" : "无"}} <span>健康证：</span>{{doctor.cardState2 ? "有" : "无"}}</p>
+              <p><span>护龄：</span>{{doctor.workTime}}</p>
+              <p><span>服务类型：</span>{{doctor.Type}}</p>
               <p>
                 <span>服务价格：</span>
                 <span class="price">￥{{doctor.servicePrice}}</span>
@@ -156,6 +157,7 @@
         doctorDetailType: 1,
         evaluateType: 1,
         serviceDate: '',
+        follow: false,
         doctor: {
           img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg',
           workTime: '12',
@@ -264,6 +266,25 @@
   .doctor-evaluate {
     width: 160px;
     margin-right: 20px;
+  }
+  
+  .follow {
+    display: inline-block;
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 14px;
+    color: #fff;
+    border-radius: 30px;
+    border: solid 1px #27b5b1;
+    background-color: #27b5b1;
+    cursor: pointer;
+  }
+  
+  .follow.on {
+    color: #27b5b1;
+    background-color: #fff;
   }
   
   .doctor-evaluate img {
@@ -448,8 +469,8 @@
     color: #999;
   }
   
-  .doctor-bottom{
-  	margin-top: 20px;
+  .doctor-bottom {
+    margin-top: 20px;
   }
   
   .doctor-bottom-title {
@@ -650,7 +671,7 @@
   }
   
   .doctor-basice-score {
-    margin-left: 30px;
+    margin-top: 20px;
   }
   
   .doctor-basice-score img {
