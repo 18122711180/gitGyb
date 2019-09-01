@@ -1,0 +1,348 @@
+<template>
+  <div id="physicianList">
+    <my-head :login="login"></my-head>
+    <section>
+      <div class="doctor-type">
+        <div class="flex-start-center doctor-box">
+          <span class="doctor-type-title">分类：</span>
+          <div class="flex-start-start doctor-type-main">
+            <span
+              v-for="(item,index) in physicianData"
+              :class="{ on : doctorType == index}"
+              :key="index"
+              @click="doctorType = index,getParamedical()"
+            >{{item}}</span>
+          </div>
+        </div>
+        <div class="flex-start-center doctor-box">
+          <span class="doctor-type-title">状态：</span>
+          <div class="flex-start-start doctor-type-main">
+            <span
+              v-for="(item,index) in stateData"
+              :class="{ on : stateType == item}"
+              :key="index"
+              @click="stateType = item,getParamedical()"
+            >{{item}}</span>
+          </div>
+        </div>
+        <div class="flex-start-center doctor-box">
+          <span class="doctor-type-title">性别：</span>
+          <div class="flex-start-start doctor-type-main">
+            <span
+              v-for="(item,index) in sexData"
+              :class="{ on : sexType == item}"
+              :key="index"
+              @click="sexType = item,getParamedical()"
+            >{{item}}</span>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="doctor-rank flex-start-center">
+        <span :class="{ on : rankState}" @click="rankState = !rankState ">闲忙状态</span>
+        <span :class="{ on : rankSex}" @click="rankSex = !rankSex ">性别</span>
+        <span :class="{ on : rankLevel}" @click="rankLevel = !rankLevel ">等级</span>
+      </div> -->
+      <div class="float-doctor-main">
+        <!-- <div
+          class="float-doctor-message flex-start-start"
+          v-for="(item , index) in doctorList"
+          :key="index"
+        > -->
+        <router-link :to="({path:'/physician/detail',query:{id:item.id}})" class="float-doctor-message flex-start-start" v-for="(item , index) in doctorList" :key="index">
+          <div class="float-doctor-message-left">
+            <img :src="item.dimagesrc">
+          </div>
+          <div class="doctor-list-main">
+            <div class="doctor-list-basic flex-start-center">
+              <span>{{item.name}}</span>
+              <span>{{item.dsex}}</span>
+              <span>{{item.dage}}岁</span>
+              <span
+                class="float-doctor-follow"
+                :class="{on : item.workstate === '忙'}"
+              >{{item.workstate}}</span>
+            </div>
+            <div class="doctor-list-message">
+              <p>
+                所属公司:
+                <span>{{item.dhospitalname}}</span>
+              </p>
+            </div>
+          </div>
+          <div class="float-doctor-message-right flex-start-start" v-if="item.certificate">
+            <span v-text="separate(item.certificate, 1)"></span>
+            <span v-text="separate(item.certificate, 2)"></span>
+            <span v-text="separate(item.certificate, 3)"></span>
+          </div>
+        </router-link>
+        <!-- </div> -->
+      </div>
+      <!-- <div class="search-page flex-center-start" v-if="pageTotal>10">
+        <el-pagination
+          background=""
+          @current-change="pageChange"
+          layout="prev, pager, next"
+          :total="pageTotal"
+        ></el-pagination>
+      </div> -->
+    </section>
+    <right-float></right-float>
+    <my-foot></my-foot>
+  </div>
+</template>
+
+<script>
+import Head from "../public/allHead.vue";
+import Float from "../public/rightFloat.vue";
+import Foot from "../public/allFoot.vue";
+export default {
+  name: "physicianList",
+  props: {
+    url: ""
+  },
+  data() {
+    return {
+      login: {
+        state: true,
+        name: "hhy",
+        menu: 0,
+        searchShow: false,
+        url: this.url
+      },
+      doctorType: 0,
+      pageTotal: 60,
+      rankState: false,
+      rankSex: false,
+      rankLevel: false,
+      physicianData: [
+        "催乳师",
+        "心理咨询师",
+        "康复理疗师",
+        "公共营养师",
+        "医事代办员"
+      ],
+      sexType: "全部",
+      sexData: ["全部", "男", "女"],
+      stateType: "全部",
+      stateData: ["全部", "闲", "忙"],
+      doctorList: [
+        {
+          id: 1,
+          img:
+            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
+          name: "韩冬梅",
+          sex: "女",
+          age: "35",
+          company: "所属陪护公司名称",
+          sales: "12",
+          evaluate: "98",
+          state: false
+        }
+      ]
+    };
+  },
+  components: {
+    props: ["login"],
+    "my-head": Head,
+    "right-float": Float,
+    "my-foot": Foot
+  },
+  created() {
+    this.getParamedical();
+  },
+  methods: {
+    getParamedical() {
+      console.log(this.sexType)
+      console.log(this.stateType)
+      let v = {};
+      if (this.sexType == "男" || this.sexType == "女") {
+        v.sex = this.sexType;
+      }
+      if (this.stateType == "闲" || this.stateType == "忙") {
+        v.workstate = this.stateType;
+      }
+      v.servetyle = this.doctorType - 0 + 2;
+      this.post("/yiqi-api/api/health/MFDoctorlist", v)
+        .then(res => {
+          this.doctorList = res.data;
+          console.log(res);
+        })
+        .catch(err => {});
+    },
+    separate(certificate, num) {
+      if (certificate.length >= num) {
+        certificate = certificate.split(",");
+        return certificate[num - 1];
+      } else {
+        return "";
+      }
+    },
+    pageChange: function(val) {
+      console.log(val);
+    }
+  }
+};
+</script>
+
+<style scoped>
+#physicianList {
+  background-color: #fff;
+}
+
+section {
+  width: 1200px;
+  padding-bottom: 20px;
+  margin: 40px auto 60px;
+  border: solid 1px #f1f1f1;
+}
+
+.doctor-type {
+  padding: 30px;
+}
+
+.doctor-type > div {
+  -webkit-flex: 1;
+  flex: 1;
+  min-width: 0;
+  margin-right: 200px;
+}
+
+.doctor-type-main span {
+  width: 90px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.doctor-type-main span + span {
+  margin-left: 15px;
+}
+
+.doctor-type-main span.on {
+  color: #fff;
+  background-color: #ff6736;
+}
+
+.float-doctor-message {
+  padding: 30px 20px;
+  border-top: solid 1px #f1f1f1;
+}
+
+.float-doctor-message-left img {
+  width: 160px;
+  height: 160px;
+  margin-right: 15px;
+}
+
+.doctor-list-main {
+  -webkit-flex: 1;
+  flex: 1;
+  min-width: 0;
+  margin-right: 20px;
+}
+
+.doctor-list-basic {
+  font-size: 18px;
+  color: #333;
+}
+
+.doctor-list-basic span + span {
+  margin-left: 5px;
+}
+
+.doctor-list-basic span:last-of-type {
+  width: 50px;
+  height: 30px;
+  line-height: 30px;
+  margin-left: 60px;
+  text-align: center;
+  font-size: 16px;
+  color: #fff;
+  background-color: #999;
+  border-radius: 5px;
+}
+
+.doctor-list-basic span.on:last-of-type {
+  background-color: #ff6736;
+}
+
+.doctor-list-message p {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #999;
+}
+
+.doctor-list-message span {
+  color: #666;
+}
+
+.float-doctor-message-right span {
+  width: 120px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  font-size: 16px;
+  color: #ff6736;
+  border: solid 1px #ff6736;
+  background-color: #fff;
+  border-radius: 40px;
+}
+
+.float-doctor-message-right span + span {
+  margin-left: 20px;
+}
+
+.doctor-rank {
+  height: 34px;
+  padding-left: 20px;
+  border-top: solid 1px #f1f1f1;
+  border-bottom: solid 1px #f1f1f1;
+}
+
+.doctor-rank span {
+  position: relative;
+  padding-right: 16px;
+  margin-right: 20px;
+  font-size: 12px;
+  color: #666;
+  cursor: pointer;
+}
+
+.doctor-rank span.on {
+  color: #ff6736;
+}
+
+.doctor-rank span:after {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  content: "";
+  margin-top: -5px;
+  border-style: solid;
+  border-width: 10px 5px 10px 5px;
+  border-color: #ccc transparent transparent transparent;
+}
+
+.doctor-rank span.on:after {
+  margin-top: -15px;
+  border-color: transparent transparent #ff6736 transparent;
+}
+
+.doctor-box {
+  padding: 5px 0;
+}
+</style>
+
+<style>
+.search-page .el-pagination.is-background .el-pager li:not(.disabled).active {
+  background-color: #ff6736;
+}
+
+.search-page .el-pagination.is-background .el-pager li:not(.disabled):hover {
+  color: #ff6736;
+}
+</style>
