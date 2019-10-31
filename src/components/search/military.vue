@@ -28,7 +28,7 @@ export default {
       login: {
         state: true,
         name: "hhy",
-        menu: 7,
+        menu: 1,
         searchShow: true,
         url: this.url
       },
@@ -41,7 +41,7 @@ export default {
       if (val && val !== "") {
         v.workey = val;
       }
-      this.post("/yiqi-api/api/drug/serachList", { workey: val })
+      this.post("/yiqi-api/api/store/searchyiliaolist", { keyword: val })
         .then(res => {
           console.log(res);
           this.goodsList = res.data;

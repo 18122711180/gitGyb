@@ -161,8 +161,8 @@ export default {
       login: {
         state: true,
         name: "hhy",
-        menu: 0,
-        searchShow: true,
+        menu: 1,
+        searchShow: false,
         url: this.url
       },
       follow: false,

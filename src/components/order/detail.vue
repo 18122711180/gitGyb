@@ -2,14 +2,14 @@
   <div id="order">
     <my-head :login="login"/>
     <section>
-      <template v-if="type == 1">
+      <!-- <template v-if="type == 1">
         <div class="order-success flex-start-center">
           <img src="../../../static/img/icon-order-success.png">
           <p class="flex-start-start">订单提交成功，请在
             <span>26分46秒</span>内完成支付！（逾期将自动取消订单）
           </p>
         </div>
-      </template>
+      </template> -->
       <template>
         <div v-if="type == 3 || type == 4" class="order-logistics">
           <h3>物流信息</h3>

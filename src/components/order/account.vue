@@ -21,7 +21,7 @@
                 <img src="../../../static/img/add-address.png">
               </p>
               <!-- </router-link> -->
-              <div class="account-address-list" v-for="(item,index) in addressList" :key="index">
+              <div @click="addressLink(index)" class="account-address-list" v-for="(item,index) in addressList" :key="index">
                 <div class="account-address-list-top flex-between-center">
                   <p class="flex-start-center">
                     {{item.receivername}}
@@ -119,6 +119,7 @@ import Float from "../public/rightFloat.vue";
 import Order from "../public/orderLeft.vue";
 import Foot from "../public/allFoot.vue";
 import placeJs from "../../../static/js/place.js";
+import { setAddress } from "@/utils/auth";
 import { mapGetters } from "vuex";
 export default {
   name: "order",
@@ -369,6 +370,10 @@ export default {
           }
         }
       }
+    },
+    addressLink(index){
+      setAddress(this.addressList[index]);
+      this.$router.push({ path: "/car/order", query:{id: this.$route.query.id} });
     }
   }
 };
@@ -438,6 +443,7 @@ section {
   width: 174px;
   height: 70px;
   margin-top: 20px;
+  cursor: pointer;
 }
 
 .account-address-title img {
@@ -452,6 +458,7 @@ section {
   font-size: 16px;
   color: #666;
   border: solid 1px #e5e5e5;
+  cursor: pointer;
 }
 
 .account-address-list-top p {

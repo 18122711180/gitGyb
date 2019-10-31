@@ -54,6 +54,13 @@ export default {
       this.post('/yiqi-api/api/drug/serachList',{workey:val}).then(res=>{
         console.log(res)
         this.goodsList = res.data
+        if(this.goodsList.length){
+          this.goodsList.map( value => {
+            value.showimg = value.imageurl1;
+            value.shopprice = value.drugprice;
+            value.shopname = value.publicname;
+          })
+        }
       }).catch(err=>{
         console.log(err)
       })

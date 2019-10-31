@@ -1,0 +1,437 @@
+<template>
+  <div id="exchange">
+    <my-head :login="login" />
+    <section>
+      <!-- <div class="exchange-top flex-start-start">
+        <img :src="goods.img">
+        <div class="exchange-top-right">
+          <h3>{{goods.name}}</h3>
+          <p><span>规格：{{goods.size}}</span>x{{goods.amount}}</p>
+          <p class="price">￥{{goods.price}}</p>
+        </div>
+      </div>-->
+      <div class="exchange-bottom">
+        <!-- <div class="exchange-bottom-list exchange-bottom-list-1 flex-start-start">
+          <span class="exchange-bottom-list-left"><i>*</i>服务类型:</span>
+          <div class="exchange-bottom-list-right">
+            <span class="exchange-bottom-list-radio" :class="{on: serviceType == 0}" @click="serviceType = 0">退货</span>
+            <span class="exchange-bottom-list-radio" :class="{on: serviceType == 1}" @click="serviceType = 1">换货</span>
+          </div>
+        </div>-->
+        <div class="exchange-bottom-list flex-start-start">
+          <span class="exchange-bottom-list-left exchange-bottom-list-left-center">
+            <i>*</i>选择原因:
+          </span>
+          <div class="exchange-bottom-list-right">
+            <el-select v-model="reason" placeholder="请选择原因">
+              <el-option
+                v-for="item in reasonData"
+                :label="item.value"
+                :value="item.label"
+                :key="item.label"
+              ></el-option>
+            </el-select>
+          </div>
+        </div>
+        <div class="exchange-bottom-list flex-start-start">
+          <span class="exchange-bottom-list-left exchange-bottom-list-left-center">问题描述:</span>
+          <div class="exchange-bottom-list-right">
+            <textarea placeholder="请简单描述你的问题" v-model="questionDetail"></textarea>
+          </div>
+        </div>
+        <!-- <div class="exchange-bottom-list flex-start-start">
+          <span class="exchange-bottom-list-left exchange-bottom-list-left-center">上传图片:</span>
+          <div class="exchange-bottom-list-right">
+            <div class="flex-start-start flex-wrap">
+              <template v-for="(image , index) in imageList" v-if="imageList.length">
+                <div class="weui-uploader__file">
+                  <img class="weui-uploader__img" :src="image.url" />
+                  <img class='img-delete' src='img/img-delete.png' @click='previewImageDelete(index)' />
+                </div>
+              </template>
+              <el-upload class="avatar-uploader" action="" list-type="picture-card" :show-file-list="false" :multiple="true" ref="upload" :file-list="imageList" :limit="maxImageLength" :on-success="previewImage" :on-exceed="overImage">
+                <div class="weui-uploader__input-box">
+                  <div class="weui-uploader__input">{{imageList.length}}/5</div>
+                </div>
+              </el-upload>
+            </div>
+          </div>
+        </div>-->
+        <div class="exchange-bottom-list flex-start-start">
+          <span class="exchange-bottom-list-left exchange-bottom-list-left-center"></span>
+          <div class="exchange-bottom-list-right">
+            <div class="exchange-submit">
+              <span @click="sumbit">提交</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <right-float />
+    <my-foot />
+  </div>
+</template>
+
+<script>
+import Head from "../public/allHead.vue";
+import Float from "../public/rightFloat.vue";
+import Foot from "../public/allFoot.vue";
+import { mapGetters } from "vuex";
+export default {
+  name: "exchange",
+  props: {
+    url: ""
+  },
+  data() {
+    return {
+      login: {
+        state: true,
+        name: "hhy",
+        menu: 8,
+        searchShow: false,
+        orderShow: true,
+        url: this.url
+      },
+      serviceType: 0,
+      reason: "",
+      reasonData: [
+        // {
+        //   laebl: '1',
+        //   value: '选择退款原因'
+        // },
+        {
+          label: 1,
+          value: "没时间，下次约"
+        },
+        {
+          label: 2,
+          value: "人在外地"
+        },
+        {
+          label: 3,
+          value: "暂时不需要服务"
+        },
+        {
+          label: 4,
+          value: "找到更好的医生"
+        }
+      ],
+      questionDetail: "",
+      imageList: [],
+      maxImageLength: 5,
+      id: '',
+      pid: '',
+      storeid: '',
+      type: ""
+    };
+  },
+  components: {
+    "my-head": Head,
+    "right-float": Float,
+    "my-foot": Foot
+  },
+  computed: {
+    ...mapGetters(["userInfo"])
+  },
+  mounted() {
+    this.id = this.$route.query.id;
+    this.pid = this.$route.query.pid;
+    this.storeid = this.$route.query.storeid;
+    this.type = this.$route.query.type;
+  },
+  methods: {
+    // previewImage: function(res, file, fileList) {
+    //   var that = this;
+    //   for (var i in fileList) {
+    //     that.imageList = fileList;
+    //   }
+    // },
+    // previewImageDelete: function(index) {
+    //   this.imageList.splice(index, 1);
+    //   this.$refs.upload.uploadFiles = this.imageList;
+    // },
+    // overImage: function() {
+    //   this.$message.error("上传图片不能超过9张");
+    // },
+    sumbit() {
+      if(!this.reason){
+        if(this.type == 1){
+          this.$message.error("请选择退款原因");
+        }else{
+          this.$message.error("请选择取消原因");
+        }
+        
+        return;
+      }
+      var url = "";
+      if(this.type == 1){
+        url = "/yiqi-api/api/perorder/addrefunt"
+      }else{
+        url = "/yiqi-api/api/perorder/callorder"
+      }
+      this.post(url, {
+        id: Number(this.id),
+        token: this.userInfo.token,
+        refundtype: this.reason,
+        reason: this.questionDetail,
+        pid: Number(this.pid),
+        storeid: Number(this.storeid)
+      })
+      .then(res => {
+          if(res.code == 0){
+            if(this.type == 1){
+               this.$message.success("申请成功");
+            }else{
+               this.$message.success("取消成功");
+            }
+           
+            this.$router.push({path: "/order"});
+          }else{
+            this.$message.success(res.msg);
+          }
+        })
+        .catch(err => {});
+    }
+  }
+};
+</script>
+
+<style scoped>
+#exchange {
+  background-color: #fff;
+}
+
+section {
+  width: 1200px;
+  margin: 30px auto 60px;
+}
+
+.exchange-top {
+  padding-bottom: 40px;
+  border-bottom: solid 1px #f1f1f1;
+}
+
+.exchange-top img {
+  width: 160px;
+  height: 160px;
+  margin-right: 30px;
+  border-radius: 5px;
+}
+
+.exchange-top-right {
+  -webkit-flex: 1;
+  flex: 1;
+  min-width: 0;
+}
+
+.exchange-top-right h3 {
+  line-height: 1.6;
+  font-size: 18px;
+  color: #333;
+}
+
+.exchange-top-right p {
+  margin-top: 15px;
+  font-size: 16px;
+  color: #999;
+}
+
+.exchange-top-right p span {
+  margin-right: 50px;
+  color: #333;
+}
+
+.exchange-top-right p.price {
+  color: #ff4a60;
+}
+
+.exchange-bottom-list {
+  margin-top: 20px;
+}
+
+.exchange-bottom-list-1 {
+  padding: 20px 0;
+}
+
+.exchange-bottom-list-left {
+  width: 100px;
+  text-align: right;
+  margin-right: 10px;
+  font-size: 16px;
+  color: #333;
+}
+
+.exchange-bottom-list-left-center {
+  line-height: 40px;
+}
+
+.exchange-bottom-list-left i {
+  font-style: normal;
+  font-size: 14px;
+  color: #ff4a60;
+}
+
+.exchange-bottom-list-right {
+  width: 600px;
+}
+
+.exchange-bottom-list-radio {
+  position: relative;
+  padding-left: 20px;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+}
+
+.exchange-bottom-list-radio + .exchange-bottom-list-radio {
+  margin-left: 60px;
+}
+
+.exchange-bottom-list-radio::before {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  content: "";
+  width: 12px;
+  height: 12px;
+  margin-top: -6px;
+  border-radius: 12px;
+  border: solid 1px #ccc;
+  box-sizing: border-box;
+}
+
+.exchange-bottom-list-radio.on {
+  color: #ff6736;
+}
+
+.exchange-bottom-list-radio.on::before {
+  border-color: #ff6736;
+}
+
+.exchange-bottom-list-radio.on::after {
+  position: absolute;
+  left: 3px;
+  top: 50%;
+  content: "";
+  margin-top: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 6px;
+  background-color: #ff6736;
+}
+
+.exchange-bottom-list-right textarea {
+  width: 100%;
+  height: 120px;
+  padding: 10px;
+  border-radius: 5px;
+  outline: none;
+  border: solid 1px #ccc;
+  resize: none;
+}
+
+.weui-uploader__file {
+  position: relative;
+  margin-right: 9px;
+  margin-bottom: 9px;
+}
+
+.weui-uploader__img {
+  display: block;
+  width: 120px;
+  height: 120px;
+}
+
+.img-delete {
+  position: absolute;
+  right: -7px;
+  top: -7px;
+  width: 21px;
+  height: 21px;
+  cursor: pointer;
+}
+
+.weui-uploader__input-box {
+  float: left;
+  position: relative;
+  margin-right: 9px;
+  margin-bottom: 9px;
+  width: 120px;
+  height: 120px;
+  border: 1px solid #d9d9d9;
+}
+
+.weui-uploader__input-box:before,
+.weui-uploader__input-box:after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  background-color: #d9d9d9;
+}
+
+.weui-uploader__input-box:before {
+  width: 2px;
+  height: 39.5px;
+}
+
+.weui-uploader__input-box:after {
+  width: 39.5px;
+  height: 2px;
+}
+
+.weui-uploader__input-box:active {
+  border-color: #999;
+}
+
+.weui-uploader__input-box:active:before,
+.weui-uploader__input-box:active:after {
+  background-color: #999;
+}
+
+.weui-uploader__input {
+  position: absolute;
+  left: 0;
+  bottom: 8px;
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #999;
+}
+
+.exchange-submit span {
+  display: inline-block;
+  width: 200px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  font-size: 16px;
+  color: #fff;
+  border-radius: 5px;
+  background-color: #ff6736;
+  cursor: pointer;
+}
+</style>
+<style>
+.exchange-bottom-list-right .el-select {
+  width: 100%;
+}
+
+.el-upload--picture-card {
+  width: 120px;
+  height: 120px;
+}
+
+.el-upload--picture-card {
+  border: none;
+}
+
+.el-upload--picture-card:hover,
+.el-upload:focus {
+  color: #999;
+}
+</style>

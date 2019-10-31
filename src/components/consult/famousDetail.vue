@@ -1,11 +1,11 @@
 <template>
   <div id="famousDetail">
-    <my-head :login="login"/>
+    <my-head :login="login" />
     <section>
       <div class="doctor-top flex-between-start">
         <div class="doctor-top-left flex-start-start">
           <div class="doctor-evaluate">
-            <img :src="doctor.dimagesrc">
+            <img :src="doctor.dimagesrc" />
             <p>
               <span>从业{{doctor.workage}}年</span>
               <span>好评率{{doctor.quality}}%</span>
@@ -17,74 +17,128 @@
               <span>{{doctor.dname}}</span>
               <span>{{doctor.dsex}}</span>
               <span>{{doctor.dlevel}}</span>
-              <p class="flex-start-center">
+              <!-- <p class="flex-start-center">
                 <span class="doctor-basice-state" :class="{on : doctor.state}">{{doctor.workstate}}</span>
-              </p>
+              </p>-->
             </div>
             <div class="doctor-other">
               <p>{{doctor.ddepartmentname}}</p>
               <p>{{doctor.dcompanyname}}</p>
               <p>{{doctor.dexperience}}</p>
-              <p>
-                <span>服务价格：</span>
-                <span class="price">￥{{doctor.serverprice}}</span>
-              </p>
-              <div class="doctor-other-amount flex-start-center">
-                <p>选择数量：</p>
-                <input type="number" v-model="amount" @change="amountChange">
-                <p>本月仅剩{{doctor.surplus}}个服务名额，预估从速</p>
-              </div>
-              <p>选择服务：</p>
-              <div class="doctor-other-service flex-start-start flex-wrap">
-                <span
-                  v-for="(item, index) in serviceData"
-                  :class="{on : serviceType == index}"
-                  @click="serviceType = index"
-                >{{item}}</span>
-              </div>
-              <template v-if="serviceType == 4">
+              <template v-if="nursingLevelData.length">
                 <p>
-                  计时计价：
-                  <span
-                    style="font-size: 12px;color: #ff6736;"
-                  >（*超时以20分钟为一单位，加收百分之二十的服务费，不足20分钟，按20分钟计算*）</span>
+                  <span>服务价格：</span>
+                  <span class="price">￥{{serverpricetype}}</span>
                 </p>
-                <div class="doctor-other-service flex-start-start flex-wrap">
-                  <span
-                    v-for="(item, index) in serviceTimeData"
-                    :class="{on : serviceTimeType == index}"
-                    @click="serviceTimeType = index"
-                  >{{item}}</span>
-                </div>
-                <p>选择服务时间：</p>
-                <div class="doctor-service-time">
-                  <el-date-picker v-model="serviceDate" type="datetime" placeholder="选择日期时间"></el-date-picker>
+                <div
+                  class="doctor-other-amount flex-start-center"
+                  v-if="detailChoiceType == 15 || detailChoiceType == 22"
+                >
+                  <p>选择数量：</p>
+                  <input type="number" v-model="amount" @change="amountChange" />
+                  <p>本月仅剩{{doctor.surplus}}个服务名额，预估从速</p>
                 </div>
                 <p>选择服务：</p>
                 <div class="doctor-other-service flex-start-start flex-wrap">
                   <span
-                    v-for="(item, index) in serviceData2"
-                    :class="{on : serviceType2 == index}"
-                    @click="serviceType2 = index"
-                  >{{item}}</span>
+                    v-for="(item, index) in nursingLevelData"
+                    :key="index"
+                    :class="{on : nursingLevel == index}"
+                    @click="serverselect(index,item.id)"
+                  >{{item.serverename}}</span>
                 </div>
-                <p>需要医用耗材：</p>
-                <div class="doctor-other-service flex-start-start flex-wrap">
-                  <span
-                    v-for="(item, index) in serviceData3"
-                    :class="{on : serviceType3 == index}"
-                    @click="serviceType3 = index"
-                  >{{item}}</span>
-                </div>
+                <template v-if="detailChoiceType == 22">
+                  <p>
+                    计时计价：
+                    <span
+                      style="font-size: 12px;color: #ff6736;"
+                    >（*超时以20分钟为一单位，加收百分之二十的服务费，不足20分钟，按20分钟计算*）</span>
+                  </p>
+                </template>
+                <template v-if="detailChoiceType == 15"></template>
+                <template v-else-if="detailChoiceType == 19 || detailChoiceType >= 100">
+                  <template v-if="serviceTimeData.length">
+                    <p>选择项目：</p>
+                    <div class="doctor-other-service flex-start-start flex-wrap">
+                      <span
+                        v-for="(item, index) in serviceTimeData"
+                        :class="{on : serviceTimeType == index}"
+                        @click="serviceTimeType = index"
+                        :key="index"
+                      >{{item.servername}}</span>
+                    </div>
+                  </template>
+                  <template v-if="serviceData2.length">
+                    <p>选择类型：</p>
+                    <div class="doctor-other-service flex-start-start flex-wrap">
+                      <span
+                        v-for="(item, index) in serviceData2"
+                        :class="{on : serviceType2 == index}"
+                        @click="serviceType2 = index"
+                        :key="index"
+                      >{{item.servername}}</span>
+                    </div>
+                  </template>
+
+                  <p>选择服务时间：</p>
+                  <div class="doctor-service-time">
+                    <el-date-picker
+                      value-format="yyyy-MM-dd HH"
+                      format="yyyy-MM-dd HH"
+                      v-model="serviceStartDate"
+                      type="datetime"
+                      placeholder="选择开始日期时间"
+                      :picker-options="pickerOptions"
+                      @change="serviceTimeChange"
+                    ></el-date-picker>
+                  </div>
+
+                  <p>需要医用耗材：</p>
+                  <div class="doctor-other-service flex-start-start flex-wrap">
+                    <span
+                      v-for="(item, index) in serviceData3"
+                      :class="{on : serviceType3 == index}"
+                      @click="serviceType3 = index"
+                      :key="index"
+                    >{{item}}</span>
+                  </div>
+                </template>
+                <template v-else>
+                  <p>选择服务时间：</p>
+                  <div class="doctor-service-time">
+                    <el-date-picker
+                      value-format="yyyy-MM-dd HH"
+                      format="yyyy-MM-dd HH"
+                      v-model="serviceStartDate"
+                      type="datetime"
+                      placeholder="选择开始日期时间"
+                      :picker-options="pickerOptions"
+                      @change="serviceTimeChange"
+                    ></el-date-picker>至
+                    <el-date-picker
+                      value-format="yyyy-MM-dd HH"
+                      format="yyyy-MM-dd HH"
+                      v-model="serviceEndDate"
+                      type="datetime"
+                      disabled
+                      placeholder="选择结束日期时间"
+                    ></el-date-picker>
+                  </div>
+                </template>
               </template>
             </div>
             <div class="doctor-btn flex-start-start">
-              <span>立即购买</span>
-              <span>加入购物车</span>
+              <el-button
+                style="background: #ff6736"
+                v-if="nursingLevelData.length"
+                type="warning"
+                @click="submit"
+              >立即购买</el-button>
+              <el-button style="background: rgb(241, 158, 131);" disabled v-else type="warning">暂无服务</el-button>
             </div>
           </div>
         </div>
-        <div class="doctor-top-right">
+        <!-- <div class="doctor-top-right">
           <img :src="doctor.hospitalImg">
           <p>{{doctor.hospital}}</p>
           <p>
@@ -95,15 +149,15 @@
             <span>详细地址：</span>
             {{doctor.address}}
           </p>
-        </div>
+        </div>-->
       </div>
-      <div class="doctor-bottom">
+      <div class="doctor-bottom" v-if="nursingLevelData.length">
         <div class="doctor-bottom-title flex-start-start">
           <span :class="{on : doctorDetailType == 1}" @click="doctorDetailType = 1">简介及服务</span>
           <span :class="{on : doctorDetailType == 2}" @click="doctorDetailType = 2,getEstimate()">评价</span>
         </div>
         <template v-if="doctorDetailType == 1">
-          <div class="doctor-bottom-time flex-center-center">
+          <!-- <div class="doctor-bottom-time flex-center-center">
             <p>
               <span>工作时间:</span>
               {{doctor.workweek}}
@@ -111,13 +165,10 @@
             <p>{{doctor.workweek}}</p>
           </div>
           <h3 class="title">个人简介</h3>
-          <div class="doctor-bottom-introduce">
-            <p>{{doctor.dintroduction}}</p>
-          </div>
-          <!-- <h4 class="title">服务流程</h4>
-          <div class="doctor-bottom-server">
-          	<img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg"/>
+          <div class="doctor-bottom-introduce" v-html="nursingLevelData[nursingLevel].serverprocess">
           </div>-->
+          <h4 class="title">服务流程</h4>
+          <div class="doctor-bottom-server" v-html="nursingLevelData[nursingLevel].serverprocess"></div>
         </template>
         <template v-if="doctorDetailType == 2">
           <!-- <div class="doctor-evaluate-title flex-start-center">
@@ -126,7 +177,7 @@
             <span :class="{on: evaluateType == 3}" @click="evaluateType = 3">中评(568)</span>
             <span :class="{on: evaluateType == 4}" @click="evaluateType = 4">差评(568)</span>
             <span :class="{on: evaluateType == 5}" @click="evaluateType = 5">有图(568)</span>
-          </div> -->
+          </div>-->
           <div class="doctor-evaluate-main">
             <div
               class="doctor-evaluate-list flex-start-start"
@@ -134,7 +185,7 @@
               :key="index"
             >
               <div class="doctor-evaluate-list-left">
-                <img :src="item.ruimage">
+                <img :src="item.ruimage" />
               </div>
               <div class="doctor-evaluate-list-right">
                 <div class="doctor-evaluate-name">
@@ -147,15 +198,15 @@
                     :key="idx"
                     :src="item.score > idx ? '../../../static/img/star-on.png' : '../../../static/img/star-off.png'"
                   >
-                </div> -->
+                </div>-->
                 <div class="doctor-evaluate-introduce">
                   <p>{{item.message}}</p>
                   <p>{{item.time}}</p>
                 </div>
                 <div class="doctor-evaluate-img flex-start-start flex-wrap">
-                  <img :src="item.image" v-if="item.image">
-                  <img :src="item.image1" v-if="item.image1">
-                  <img :src="item.image2" v-if="item.image">
+                  <img :src="item.image" v-if="item.image" />
+                  <img :src="item.image1" v-if="item.image1" />
+                  <img :src="item.image2" v-if="item.image" />
                 </div>
                 <div class="doctor-evaluate-reply">
                   <p>{{item.sreply.storename}}：{{item.sreply.smassage}}</p>
@@ -166,8 +217,8 @@
         </template>
       </div>
     </section>
-    <right-float/>
-    <my-foot/>
+    <right-float />
+    <my-foot />
   </div>
 </template>
 
@@ -175,6 +226,8 @@
 import Head from "../public/allHead.vue";
 import Float from "../public/rightFloat.vue";
 import Foot from "../public/allFoot.vue";
+import { mapGetters } from "vuex";
+import { setOrder } from "@/utils/auth";
 export default {
   name: "famousDetail",
   props: {
@@ -189,46 +242,33 @@ export default {
         searchShow: false,
         url: this.url
       },
-      serviceType: 0,
-      serviceData: ["单次服务", "月卡服务", "季卡服务", "年卡服务", "上门服务"],
       serviceTimeType: 0,
-      serviceTimeData: ["常规一小时", "超时20分钟"],
+      serviceTimeData: [],
       serviceType2: 0,
-      serviceData2: ["输液", "输液", "输液"],
+      serviceData2: [],
       serviceType3: 0,
       serviceData3: ["是", "否"],
       amount: 1,
       doctorDetailType: 1,
       evaluateType: 1,
       serviceDate: "",
-      doctor: {
-        img:
-          "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-        workTime: "12",
-        evaluate: "98",
-        name: "韩冬梅",
-        sex: "女",
-        level: "主治医师",
-        type: "妇产科&生殖中心",
-        address: "江西赣州市立医院",
-        follow: false,
-        goodAt:
-          "擅长口腔种植手术、口腔正畸治疗、复杂埋伏阻生牙的拔出、复杂根治生牙的拔出、复杂根治牙的大拔疗、牙周序列治疗、口腔黏膜病的诊断治疗。",
-        servicePrice: "69.00",
-        surplus: 3,
-        hospital: "江西赣州市立医院",
-        tel: "0755-1234567",
-        address: "深圳市南山区东滨路xxxx南山人民医院",
-        hospitalImg:
-          "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-        timeWeek: "周一至周五",
-        timeAm: "09：00至17：00",
-        timePm: "14:00至17:00"
-      },
-      evaluaterList: []
+      doctor: {},
+      evaluaterList: [],
+      serverpricetype: "",
+      priceType: 1,
+      priceType2: "",
+      nursingLevel: 0,
+      nursingLevelData: [],
+      detailChoiceType: "",
+      serviceStartDate: "",
+      serviceEndDate: "",
+      pickerOptions: {},
+      secondList: '',
+      serviceTime: 0
     };
   },
   created() {
+    var that = this;
     this.login.menu = this.$route.query.menu;
     if (this.$route.query.id) {
       this.getDetails();
@@ -237,6 +277,32 @@ export default {
       this.$message.error("查询错误");
       this.$router.go(-1);
     }
+
+    var newtime = new Date();
+    var startTime =
+      newtime.getFullYear() +
+      "-" +
+      that.addzore(newtime.getMonth() + 1) +
+      "-" +
+      that.addzore(newtime.getDate());
+    this.serviceStartDate =
+      newtime.getFullYear() +
+      "-" +
+      that.addzore(newtime.getMonth() + 1) +
+      "-" +
+      that.addzore(newtime.getDate()) +
+      " " +
+      that.addzore(newtime.getHours());
+    this.serviceEndDate = this.serviceStartDate;
+    that.pickerOptions = {
+      disabledDate(time) {
+        let nowDate = new Date(startTime);
+        return time.getTime() < nowDate - 86400000;
+      }
+    };
+  },
+  computed: {
+    ...mapGetters(["userInfo"])
   },
   components: {
     props: ["login"],
@@ -251,6 +317,12 @@ export default {
       })
         .then(res => {
           this.doctor = res.data;
+          this.nursingLevelData = res.data.bdlist;
+          if (this.nursingLevelData.length) {
+            this.serverpricetype = res.data.bdlist[0].serverprice;
+            this.detailChoiceType = res.data.bdlist[0].id;
+            this.getproject();
+          }
           console.log(res);
         })
         .catch(err => {});
@@ -265,12 +337,146 @@ export default {
         })
         .catch(err => {});
     },
+    serverselect(index, id) {
+      this.nursingLevel = index;
+      this.detailChoiceType = id;
+      this.getproject();
+    },
+    getproject() {
+      var that = this;
+      var newform = {
+        doctorid: this.$route.query.id,
+        serverpricetypeid: this.detailChoiceType
+      };
+
+      this.post("/yiqi-api/api/health/doctorserviceorder", newform)
+        .then(res => {
+          this.serviceTimeData = [];
+          this.serviceData2 = [];
+          this.secondList = res.data;
+          this.serverpricetype = res.data.serviceprice;
+          if (this.detailChoiceType == 19 || this.detailChoiceType >= 100) {
+            if (!!res.data.list2.length) {
+              that.serviceTimeType = 0;
+              that.serverpricetype = res.data.list2[0].serviceprice;
+              that.priceType = res.data.list2[0].serverid;
+              this.serviceTimeData = res.data.list2;
+            } else {
+              this.serviceTimeData = [];
+            }
+            if (!!res.data.list3.length) {
+              that.serverpricetype =
+                (parseInt(res.data.list3[0].serviceprice * 100) *
+                  (res.data.list2[0].serverid - 10)) /
+                100;
+              that.priceType2 = res.data.list3[0].serverid;
+              this.serviceData2 = res.data.list3;
+            } else {
+              this.serviceData2 = [];
+            }
+          }
+          this.serviceTimeChange();
+        })
+        .catch(err => {
+          this.$message.error(err.msg);
+        });
+    },
     amountChange: function() {
       if (this.amount < 1) {
         this.amount = 1;
-      } else if (this.amount > this.doctor.surplus) {
-        this.amount = this.doctor.surplus;
       }
+    },
+
+    serviceTimeChange: function() {
+      var that = this;
+      var dTime = new Date();
+      var newtime = that.serviceStartDate.split(" ");
+
+      var startTime = Date.parse(newtime[0]);
+      var time = 0;
+      if (that.detailChoiceType == 16) {
+        time = 30;
+      } else if (that.detailChoiceType == 17) {
+        time = 90
+      } else if (that.detailChoiceType == 18) {
+        time = 365
+      } else if (that.detailChoiceType == 22) {
+        time = 0
+      }
+
+      var endtime = new Date(startTime + time * 86400000);
+      this.serviceEndDate =
+        endtime.getFullYear() +
+        "-" +
+        that.addzore(endtime.getMonth() + 1) +
+        "-" +
+        that.addzore(endtime.getDate()) +
+        " " +
+        newtime[1];
+    },
+
+    addzore(val) {
+      if (val < 10) {
+        val = "0" + val.toString();
+      }
+      return val;
+    },
+
+    submit() {
+      var that = this;
+      if (!this.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+
+      var serviccount = 1;
+      var servicebegan = this.serviceStartDate + ":00";
+      if (that.detailChoiceType == 15 || that.detailChoiceType == 22) {
+        serviccount = that.amount
+        servicebegan = ""
+      }
+
+      var formData = {
+        doctorid: Number(this.$route.query.id),
+        serverpricetype: parseInt(this.detailChoiceType),
+        serverpriceprojecttype: this.priceType,
+        serverpriceprojecttypenam: 0,
+        servicebegan: servicebegan,
+        note: "",
+        serviccount: serviccount,
+        servicename: this.secondList.servername,
+        servertype: 2,
+        serviceimage: this.secondList.dimagesrc,
+        token: this.userInfo.token
+      };
+      this.post("/yiqi-api/api/Server/doctorservic", formData)
+        .then(res => {
+          console.log(res.data);
+          that.order2(res.data.id, res.data.shoptype);
+        })
+        .catch(err => {
+          this.$message.error(err.msg);
+        });
+    },
+
+    order2(infoId, shoptype) {
+      var that = this;
+      var formData = {
+        infoId: infoId,
+        shoptype: shoptype,
+        token: this.userInfo.token
+      };
+      this.post("/yiqi-api/api/Server/getservic", formData)
+        .then(res => {
+          setOrder(res.data);
+          this.$router.push({
+            path: "/car/order",
+            query: { id: this.$route.query.id }
+          });
+        })
+        .catch(err => {
+          this.$message.error(err.msg);
+        });
     }
   }
 };

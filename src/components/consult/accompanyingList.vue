@@ -12,7 +12,7 @@
       </div>
       <div class="float-doctor-main" >
         <router-link
-          :to="{ path: '/accompanying/detail', query: { id: item.id ,menu:login.menu ,searchShow:login.searchShow}}"
+          :to="{ path: '/nurse/detail', query: { id: item.id, menu:login.menu}}"
           class="float-doctor-message flex-start-start"
           v-for="(item , index) in doctorList[departmentMenuType].list"
           :key="index"

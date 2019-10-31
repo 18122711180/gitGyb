@@ -70,7 +70,7 @@
           </div>
           <div class="nursing-main">
             <div class="nursing-main-list-1 flex-start-start">
-              <router-link :to="({path:'accompanying/detail',query:{id:item.id,menu:2}})" v-for="(item , index) in homeData.YlbHugongList" :key="index">
+              <router-link :to="({path:'nurse/detail',query:{id:item.id,menu:2}})" v-for="(item , index) in homeData.YlbHugongList" :key="index">
                 <!-- <img class="nursing-main-photo" :src="item.photo"> -->
                 
                 <el-image style="width: 288px; height: 365px" :src="item.photo" fit="fill"></el-image>
@@ -106,8 +106,8 @@
           <div class="home-title">
             <img src="../../../static/img/home-title-3.png">
           </div>
-          <div class="banner">
-            <img :src="home.banner">
+          <div class="banner" v-if="homeData.SysfootAdvertisingImgList">
+            <img :src="homeData.SysfootAdvertisingImgList[0].imgsrc">
           </div>
           <div class="recommend-list flex-start-start flex-wrap">
             <router-link :to="({path:'/goods/detail',query:{id:item.pid,menu:0}})" v-for="(item, index) in homeData.YlbProductsList" :key="index">
@@ -152,65 +152,18 @@ export default {
       home: {
         banner:
           "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-        noticeList: [
-          {
-            id: "1",
-            text: "公告标题公告标题公告标题告标题告标题公告标标题告标...",
-            time: "2019-4-26"
-          },
-          {
-            id: "1",
-            text: "公告标题公告标题公告标题告标题告标题公告标标题告标...",
-            time: "2019-4-26"
-          },
-          {
-            id: "1",
-            text: "公告标题公告标题公告标题告标题告标题公告标标题告标...",
-            time: "2019-4-26"
-          },
-          {
-            id: "1",
-            text: "公告标题公告标题公告标题告标题告标题公告标标题告标...",
-            time: "2019-4-26"
-          },
-          {
-            id: "1",
-            text: "公告标题公告标题公告标题告标题告标题公告标标题告标...",
-            time: "2019-4-26"
-          },
-          {
-            id: "1",
-            text: "公告标题公告标题公告标题告标题告标题公告标标题告标...",
-            time: "2019-4-26"
-          },
-          {
-            id: "1",
-            text: "公告标题公告标题公告标题告标题告标题公告标标题告标...",
-            time: "2019-4-26"
-          },
-          {
-            id: "1",
-            text: "公告标题公告标题公告标题告标题告标题公告标标题告标...",
-            time: "2019-4-26"
-          },
-          {
-            id: "1",
-            text: "公告标题公告标题公告标题告标题告标题公告标标题告标...",
-            time: "2019-4-26"
-          }
-        ],
         health: [
           {
             url: "/hospital/list",
             img: "../../../static/img/health-1.png",
             name: "名医榜",
-            introduce: "私人定制 安全放心"
+            introduce: ""
           },
           {
             url: "/consultDoctor",
             img: "../../../static/img/health-2.png",
             name: "私人医生",
-            introduce: "私人定制 安全放心"
+            introduce: "温暖陪护 照顾周到"
           },
           {
             url: "/physician/list",
@@ -225,10 +178,10 @@ export default {
             introduce: "私人定制 安全放心"
           },
           {
-            url: "",
+            url: "/consult/index",
             img: "../../../static/img/health-5.png",
             name: "健康咨询",
-            introduce: "私人定制 安全放心"
+            introduce: "实时更新"
           }
         ],
         nursingList1: [],
@@ -238,103 +191,21 @@ export default {
             url:'/nurse/list',
             img: "../../../static/img/nurse-1.png",
             name: "家庭陪护",
-            introduce: "免排队 方便快捷"
+            introduce: "尊享 专属服务"
           },
           {
             id: 2,
             url:'/nurse/list',
             img: "../../../static/img/nurse-2.png",
             name: "医院陪护",
-            introduce: "免排队 方便快捷"
+            introduce: "专业护工服务"
           },
           {
             id: 3,
             url:'/nurse/list',
             img: "../../../static/img/nurse-3.png",
             name: "母婴陪护",
-            introduce: "免排队 方便快捷"
-          }
-        ],
-        recommendList: [
-          {
-            id: 1,
-            img:
-              "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-            name: "ICEPACK大小颗粒",
-            price: "69.00",
-            sold: "1108"
-          },
-          {
-            id: 1,
-            img:
-              "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-            name: "ICEPACK大小颗粒",
-            price: "69.00",
-            sold: "1108"
-          },
-          {
-            id: 1,
-            img:
-              "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-            name: "ICEPACK大小颗粒",
-            price: "69.00",
-            sold: "1108"
-          },
-          {
-            id: 1,
-            img:
-              "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-            name: "ICEPACK大小颗粒",
-            price: "69.00",
-            sold: "1108"
-          },
-          {
-            id: 1,
-            img:
-              "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-            name: "ICEPACK大小颗粒",
-            price: "69.00",
-            sold: "1108"
-          },
-          {
-            id: 1,
-            img:
-              "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-            name: "ICEPACK大小颗粒",
-            price: "69.00",
-            sold: "1108"
-          },
-          {
-            id: 1,
-            img:
-              "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-            name: "ICEPACK大小颗粒",
-            price: "69.00",
-            sold: "1108"
-          },
-          {
-            id: 1,
-            img:
-              "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-            name: "ICEPACK大小颗粒",
-            price: "69.00",
-            sold: "1108"
-          },
-          {
-            id: 1,
-            img:
-              "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-            name: "ICEPACK大小颗粒",
-            price: "69.00",
-            sold: "1108"
-          },
-          {
-            id: 1,
-            img:
-              "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-            name: "ICEPACK大小颗粒",
-            price: "69.00",
-            sold: "1108"
+            introduce: "贴心月嫂服务"
           }
         ]
       }

@@ -1,8 +1,8 @@
 <template>
   <div id="order">
-    <my-head :login="login"/>
+    <my-head :login="login" />
     <section class="flex-between-start">
-      <order-left :num="menuNum" @scrollNum="menuChange"/>
+      <order-left :num="menuNum" @scrollNum="menuChange" />
       <div class="order-main">
         <h3>我的订单</h3>
         <div class="order-frame">
@@ -27,12 +27,12 @@
                   <span>{{item.date}}</span>
                   <span>订单编号：{{item.logistics}}</span>
                 </div>
-                <span v-if="item.type == 1" class="residue">支付剩余时间：{{item.residueTime}}</span>
+                <!-- <span v-if="item.type == 1" class="residue">支付剩余时间：{{item.residueTime}}</span> -->
               </div>
               <div class="order-list-bottom flex-start-start" v-for="(val,i) in item.list" :key="i">
                 <div class="order-list-message flex-between-center">
                   <div class="order-list-message-left flex-start-start">
-                    <img :src="val.image">
+                    <img :src="val.image" />
                     <div class="order-list-message-basic">
                       <div class="order-list-message-name">
                         <span>{{val.name}}</span>
@@ -55,13 +55,26 @@
                     v-if="menuNum === 2 || menuNum === 3 || menuNum === '2' || menuNum === '3'"
                   >{{item.state | SorderFormType}}</span>
                   <!-- <span>(退款中)</span> -->
-                  <router-link :to="({path:'/order/detail',query:{orderId:val.recordid}})">订单详情</router-link>
+                  <!-- <router-link :to="({path:'/order/detail',query:{orderId:val.recordid}})">订单详情</router-link> -->
                 </div>
                 <div class="order-list-oper order-list-bottom-div flex-center-center flex-column">
-                  <router-link to="/" class="on">立即付款</router-link>
+                  <!-- <span class="on">立即付款</span>
                   <p>
                     <span>投诉</span>
                     <span v-if="item.state === 4 || item.state === 6 || item.state === 7">删除</span>
+                  </p>-->
+                  <p>
+                    <span @click="serverOther(item,1)" v-if="menuNum < 3 && (item.state == 3 || item.state == 4)">投诉</span>
+                    <span @click="evaluaterder(item, menuNum)" v-if="item.state == 4 && item.isComment == 0">待评价</span>
+                    <span @click="cancleorder(item, 1)" v-if="item.state == 2">申请退款</span>
+                    <span @click="cancleorder(item, 2)" v-if="item.state == 1">取消订单</span>
+                    <span @click="payment(item)" v-if="item.state == 1">立即付款</span>
+                    <span @click="rufunddetail(item)" v-if="item.state == 7 || item.state == 5 || item.state == 8">退款详情</span>
+                    <!-- <span v-if="menuNum < 3 && item.isnavigation == 1 && item.state == 3">消费码</span> -->
+                    <span @click="serverOther(item,2)" v-if="menuNum > 2 && item.state == 4">申请售后</span>
+                    <span @click="remindorder(item)" v-if="menuNum > 2 && item.state == 2">提醒发货</span>
+                    <span @click="serverOther(item,2)" v-if="menuNum > 2 && item.state == 3">退换货</span>
+                    <span @click="ordersure(item)" v-if="menuNum > 2 && item.state == 3">确认收货</span>
                   </p>
                 </div>
               </div>
@@ -70,8 +83,8 @@
         </div>
       </div>
     </section>
-    <right-float/>
-    <my-foot/>
+    <right-float />
+    <my-foot />
   </div>
 </template>
 
@@ -81,6 +94,7 @@ import Float from "../public/rightFloat.vue";
 import Order from "../public/orderLeft.vue";
 import Foot from "../public/allFoot.vue";
 import { mapGetters } from "vuex";
+import { setOrder } from "@/utils/auth";
 export default {
   name: "order",
   props: {
@@ -130,6 +144,7 @@ export default {
       v.token = this.userInfo.token;
       v.ordertype = this.menuNum - 0 + 1;
       v.orderstate = this.orderMenuType;
+      
       this.post("/yiqi-api/api/perorder/list", {
         token: this.userInfo.token,
         ordertype: this.menuNum - 0 + 1,
@@ -150,6 +165,111 @@ export default {
       console.log(num);
       this.menuNum = num;
       this.getOrderform();
+    },
+    cancleorder(item, type) {
+      var pid = 0;
+      var storeid = 0;
+      var that = this;
+      if (item.pid) {
+        pid = item.pid;
+      }
+      if (!!item.storeid) {
+        storeid = item.storeid;
+      }
+      this.$router.push({
+        path: "/order/cancle",
+        query: { id: item.id, pid: pid, storeid: storeid, type: type }
+      });
+    },
+    serverOther(item,type){
+      var pid = 0;
+      var storeid = 0;
+      var that = this;
+      var url = "";
+      if (item.pid) {
+        pid = item.pid;
+      }
+      if (!!item.storeid) {
+        storeid = item.storeid;
+      }
+      if(type == 2){
+        url = "/order/exchange"
+      }else{
+        url = "/order/complain"
+      }
+      this.$router.push({
+        path: url,
+        query: { id: item.id, pid: pid, storeid: storeid }
+      });
+    },
+    rufunddetail(item){
+      var that = this;
+      this.$router.push({
+        path: "/order/exchange/detail",
+        query: { id: item.id }
+      });
+    },
+    payment(item){
+      var that = this;
+      var formData = {
+        infoId: item.infoid,
+        shoptype: item.shoptype,
+        token: this.userInfo.token
+      };
+      this.post("/yiqi-api/api/Server/getservic", formData)
+        .then(res => {
+          setOrder(res.data);
+          this.$router.push({
+            path: "/car/order",
+            query: { id: this.$route.query.id }
+          });
+        })
+        .catch(err => {
+          this.$message.error(err.msg);
+        });
+    },
+    ordersure(item){
+      var formData = {
+        id: item.id,
+        token: this.userInfo.token
+      };
+      this.post("/yiqi-api/api/perother/confirmorder", formData)
+        .then(res => {
+          this.$message.success("确认收货成功");
+          this.getOrderform()
+        })
+        .catch(err => {
+          this.$message.error("确认收货失败");
+        });
+    },
+    remindorder(){
+      var formData = {
+        id: item.id,
+        token: this.userInfo.token
+      };
+      this.post("/yiqi-api/api/perorder/addhirs", formData)
+        .then(res => {
+          this.$message.success("提醒成功");
+          this.getOrderform()
+        })
+        .catch(err => {
+          this.$message.error("操作失败");
+        });
+    },
+    evaluaterder(item, type){
+      var pid = 0;
+      var storeid = 0;
+      var that = this;
+      if (item.pid) {
+        pid = item.pid;
+      }
+      if (!!item.storeid) {
+        storeid = item.storeid;
+      }
+      this.$router.push({
+        path: "/order/evaluate",
+        query: { id: item.id, pid: pid, storeid: storeid, type: type }
+      });
     }
   }
 };
@@ -344,10 +464,14 @@ section {
 
 .order-list-oper p {
   margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .order-list-oper p span {
-  margin: 0 5px;
+  margin: 5px 0;
   font-size: 14px;
   color: #ff6736;
   cursor: pointer;

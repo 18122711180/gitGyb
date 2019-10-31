@@ -98,7 +98,7 @@
           <!-- <router-link :to="({path:'/hospitalDetail',query:{id:val.cid,menu:login.menu}})"> -->
           <p class="hospital-name">{{val.cname}}</p>
           <router-link
-            :to="{ path: '/accompanying/detail', query: { id: item.id, menu:login.menu}}"
+            :to="{ path: '/nurse/detail', query: { id: item.id, menu:login.menu}}"
             class="float-doctor-message flex-start-start"
             v-for="(item , index) in doctorList[index].list"
             :key="index"
@@ -116,7 +116,7 @@
                   class="float-doctor-follow"
                   :class="{'on' : item.workstate}"
                 >{{item.workstate}}</span>
-                <template v-if="type != 2">
+                <!-- <template v-if="type != 2">
                   <div class="flex-start-center doctor-basice-score">
                     <img
                       v-for="idx in 5"
@@ -124,7 +124,7 @@
                       :src="item.quality / 20 >= idx ? '../../../static/img/star-on.png' : '../../../static/img/star-off.png'"
                     >
                   </div>
-                </template>
+                </template> -->
               </div>
               <div class="doctor-list-message">
                 <p>
@@ -388,18 +388,22 @@ export default {
       });
     },
     stateVal(val) {
+      this.stateText = val;
       if (val === "") {
         this.stateText = "全部";
       }
+      
       this.workstate = val;
     },
     sexVal(val) {
+      this.sexText = val;
       if (val === "") {
         this.sexText = "全部";
       }
       this.sex = val;
     },
     ageVal(val) {
+      this.ageText = val;
       if (val === "") {
         this.ageText = "全部";
       }

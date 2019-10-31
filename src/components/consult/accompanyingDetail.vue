@@ -71,11 +71,12 @@
               </p>
               <div class="doctor-other-amount flex-start-center">
                 <p>选择数量：</p>
-                <input type="number" v-model="amount" @change="amountChange">
+                <el-input-number v-model="amount" @change="amountChange" :min="1" :max="99" label="描述文字"></el-input-number>
               </div>
               <p>
                 计时计价：
                 <span
+                  title="（*超时以20分钟为一单位，加收百分之二十的服务费，不足20分钟，按20分钟计算*）"
                   style="font-size: 12px;color: #ff6736;"
                 >（*超时以20分钟为一单位，加收百分之二十的服务费，不足20分钟，按20分钟计算*）</span>
               </p>
@@ -285,11 +286,9 @@ export default {
         })
         .catch(err => {});
     },
-    amountChange: function() {
-      if (this.amount < 1) {
-        this.amount = 1;
-      } else if (this.amount > this.doctor.surplus) {
-        this.amount = this.doctor.surplus;
+    amountChange: function(val) {
+      if (val == undefined) {
+        this.amount = 1
       }
     },
     focusPz(id,num) {

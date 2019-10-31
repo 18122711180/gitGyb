@@ -1,27 +1,14 @@
 <template>
   <div id="consultIndex">
-    <my-head :login="login"/>
+    <my-head :login="login" />
     <section>
       <!-- <div class="banner">
         <img :src="nurse.banner" />
       </div>-->
       <div class="section-center">
-        <div class="drug-consult flex-start-start">
-          <div class="notice-menu flex-start-start flex-column">
-            <span
-              v-for="(item, index) in noticeMenu"
-              :class="{on : noticeMenuType === item.lable}"
-              :key="index"
-              @click="noticeMenuType = item.lable"
-            >{{item.value}}</span>
-          </div>
-          <div class="notice-list">
-            <notice-list :keynum="noticeMenuType"></notice-list>
-          </div>
-        </div>
-        <!-- <div class="health-consult-main nursing-main-list-2">
+        <div class="health-consult-main nursing-main-list-2">
           <ul class="flex-between-start">
-            <li v-for="item in nursingList2">
+            <li v-for="(item,index) in nursingList2" :key="index">
               <router-link :to="item.url">
                 <img :src="item.img" />
                 <span>{{item.name}}</span>
@@ -36,43 +23,48 @@
         <div class="doctor-main">
           <div class="nursing-main-title">
             <img src="../../../static/img/consult-title-2.png" />
-            <router-link to="">进入名医榜 >></router-link>
+            <router-link to="/hospital/list">进入名医榜 >></router-link>
           </div>
-          <div class="doctor-list flex-between-start">
-            <div class="doctor-list-main" v-for="(item,index) in doctorList">
-              <img :src="item.img" />
-              <div class="doctor-list-bottom">
-                <p>{{item.name}}</p>
-                <p>{{item.address}}</p>
-              </div>
+          <div class="doctor-list flex-start-start">
+            <div class="doctor-list-main"  v-if="index < 4" v-for="(item,index) in doctorList.list" :key="index">
+                <img :src="item.himagsrc" />
+                <div class="doctor-list-bottom">
+                  <p>{{item.hname}}</p>
+                  <p>{{item.haddress}}</p>
+                </div>
             </div>
           </div>
         </div>
         <div class="hospital-main">
           <div class="nursing-main-title">
             <img src="../../../static/img/consult-title-3.png" />
-            <router-link to="">更多私人医生 >></router-link>
+            <router-link to="/consultDoctor">更多私人医生 >></router-link>
           </div>
-          <div class="department-menu flex-start-start">
-            <span v-for="(item , index) in departmentMenu" :class="{on : departmentMenuType == index}" @click="departmentMenuChange(index, item.id)">{{item.name}}</span>
-          </div>
+          <!-- <div class="department-menu flex-start-start">
+            <span
+              v-for="(item , index) in departmentMenu"
+              :key="index"
+              :class="{on : departmentMenuType == item.value}"
+              @click="departmentMenuChange(item.value)"
+            >{{item.value}}</span>
+          </div> -->
           <div class="hospital-list flex-start-start flex-wrap">
-            <div v-for="(item , index) in hospitalList">
-              <img :src="item.img" />
+            <div v-if="index < 4" v-for="(item , index) in hospitalList" :key="index">
+              <img :src="item.dimagesrc" />
               <div class="hospital-list-main">
                 <div class="hospital-list-basic flex-start-start">
-                  <span>{{item.name}}</span>
-                  <span>{{item.sex}}</span>
-                  <span>{{item.level}}</span>
+                  <span>{{item.dname}}</span>
+                  <span>{{item.dsex}}</span>
+                  <span>{{item.dlevel}}</span>
                 </div>
                 <div class="hospital-list-message">
-                  <p>内科:{{item.type}}</p>
-                  <p>{{item.address}}</p>
-                  <p>擅长{{item.goodAt}}</p>
+                  <p>内科:{{item.ddepartmentname}}</p>
+                  <p>{{item.dhospitalname}}</p>
+                  <!-- <p>擅长{{item.goodAt}}</p> -->
                 </div>
                 <div class="hospital-list-data flex-start-start">
-                  <span>从业{{item.workTime}}年</span>
-                  <span>好评率{{item.evaluate}}%</span>
+                  <span>从业{{item.workage}}年</span>
+                  <!-- <span>好评率{{item.evaluate}}%</span> -->
                 </div>
               </div>
             </div>
@@ -81,26 +73,35 @@
         <div class="nursing-main">
           <div class="nursing-main-title">
             <img src="../../../static/img/consult-title-4.png" />
-            <router-link to="">更多专业陪诊 >></router-link>
+            <router-link to="/accompanying/list?menu=0">更多专业陪诊 >></router-link>
           </div>
           <div class="nursing-list flex-between-start">
-            <div class="nursing-list-main" v-for="(item,index) in nursingList">
-              <img :src="item.img" />
+            <div class="nursing-list-main" v-if="index < 4" v-for="(item,index) in nursingList[0].list" :key="index">
+              <img :src="item.photo" />
               <div class="nursing-list-bottom">
                 <div class="nursing-list-basic flex-start-start">
                   <span>{{item.name}}</span>
                   <span>{{item.sex}}</span>
                   <span>{{item.age}}岁</span>
                 </div>
-                <p>所服务医院:<span>{{item.hospital}}</span></p>
-                <p>陪护公司:<span>{{item.company}}</span></p>
+                <!-- <p>
+                  所服务医院:
+                  <span>{{item.hospital}}</span>
+                </p> -->
+                <p>
+                  陪护公司:
+                  <span>{{item.companyname}}</span>
+                </p>
                 <p class="flex-start-center">
                   好评率:
-                  <span>{{item.evaluate}}</span>
-                  <img v-for="(star , idx) in 5" :src="item.score > idx ? '../../../static/img/star-on.png' : '../../../static/img/star-off.png'" />
+                  <span>{{item.quality}}</span>
+                  <!-- <img
+                    v-for="(star , idx) in 5"
+                    :src="item.score > idx ? '../../../static/img/star-on.png' : '../../../static/img/star-off.png'"
+                  /> -->
                 </p>
                 <div class="nursing-list-contact">
-                  <span>联系公司</span>
+                  <span :title="'电话：'+nursingList[0].cphone">联系公司</span>
                 </div>
               </div>
             </div>
@@ -109,31 +110,36 @@
         <div class="physician-main">
           <div class="nursing-main-title">
             <img src="../../../static/img/consult-title-5.png" />
-            <router-link to="">更多医生 >></router-link>
+            <router-link to="/physician/list">更多医生 >></router-link>
           </div>
-          <div class="department-menu flex-start-start">
-            <span v-for="(item , index) in physicianMenu" :class="{on : physicianMenuType == index}" @click="physicianMenuChange(index, item.id)">{{item.name}}</span>
-          </div>
+          <!-- <div class="department-menu flex-start-start">
+            <span
+              v-for="(item , index) in physicianMenu"
+              :key="index"
+              :class="{on : physicianMenuType == index}"
+              @click="physicianMenuChange(index, item.id)"
+            >{{item.name}}</span>
+          </div> -->
           <div class="physician-list flex-between-start">
-            <div class="physician-list-main" v-for="(item,index) in physicianList">
-              <img :src="item.img" />
+            <div class="physician-list-main" v-for="(item,index) in physicianList" :key="index" v-if="index < 3">
+              <img :src="item.dimagesrc" />
               <div class="physician-list-bottom">
                 <div class="nursing-list-basic flex-start-start">
-                  <span>{{item.name}}</span>
-                  <span>{{item.sex}}</span>
-                  <span>{{item.age}}岁</span>
+                  <span>{{item.dname}}</span>
+                  <span>{{item.dsex}}</span>
+                  <span>{{item.dage}}岁</span>
                 </div>
                 <p>所属公司:{{item.company}}</p>
                 <div class="physician-list-evaluate flex-start-start">
-                  <span>好评率{{item.evaluate}}%</span>
-                  <span>月销{{item.sales}}</span>
+                  <span>好评率{{item.dquota}}%</span>
+                  <!-- <span>月销{{item.sales}}</span> -->
                   <span>平台认证</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="physician-main">
+        <!-- <div class="physician-main">
           <div class="nursing-main-title">
             <img src="../../../static/img/consult-title-6.png" />
             <router-link to="">更多健康资讯 >></router-link>
@@ -152,10 +158,24 @@
             </el-carousel>
           </div>
         </div>-->
+
+        <div class="drug-consult flex-start-start">
+          <div class="notice-menu flex-start-start flex-column">
+            <span
+              v-for="(item, index) in noticeMenu"
+              :class="{on : noticeMenuType === item.lable}"
+              :key="index"
+              @click="noticeMenuType = item.lable"
+            >{{item.value}}</span>
+          </div>
+          <div class="notice-list">
+            <notice-list :keynum="noticeMenuType"></notice-list>
+          </div>
+        </div>
       </div>
     </section>
-    <right-float/>
-    <my-foot/>
+    <right-float />
+    <my-foot />
   </div>
 </template>
 
@@ -191,173 +211,46 @@ export default {
       },
       nursingList2: [
         {
-          url: "/hospitalDetail",
+          url: "/hospital/list",
           img: "../../../static/img/consult-1.png",
           name: "名医榜",
-          introduce: "私人定制 安全放心"
+          introduce: ""
         },
         {
-          url: "",
+          url: "/consultDoctor",
           img: "../../../static/img/consult-2.png",
           name: "私人医生",
-          introduce: "私人定制 安全放心"
+          introduce: "温暖陪护 照顾周到"
         },
         {
-          url: "",
+          url: "/physician/list",
           img: "../../../static/img/consult-3.png",
           name: "医辅名师",
           introduce: "私人定制 安全放心"
         },
         {
-          url: "",
+          url: "/accompanying/list?menu=0",
           img: "../../../static/img/consult-4.png",
           name: "专业陪诊",
           introduce: "私人定制 安全放心"
         },
         {
-          url: "",
+          url: "/consult/index",
           img: "../../../static/img/consult-5.png",
           name: "健康咨询",
-          introduce: "私人定制 安全放心"
+          introduce: "实时更新"
         }
       ],
       doctorList: [
-        {
-          id: 11,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "江西省赣州市人民医院 北院 （老院）",
-          address: "章贡区红旗大道17号"
-        },
-        {
-          id: 11,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "江西省赣州市人民医院 北院 （老院）",
-          address: "章贡区红旗大道17号"
-        },
-        {
-          id: 11,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "江西省赣州市人民医院 北院 （老院）",
-          address: "章贡区红旗大道17号"
-        },
-        {
-          id: 11,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "江西省赣州市人民医院 北院 （老院）",
-          address: "章贡区红旗大道17号"
-        }
+        
       ],
       nursingList: [
-        {
-          id: 11,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "丁海",
-          sex: "女",
-          age: "21",
-          hospital: "赣州市人民医院新院区",
-          company: "陪护公司名称",
-          score: 5
-        },
-        {
-          id: 11,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "丁海",
-          sex: "女",
-          age: "21",
-          hospital: "赣州市人民医院新院区",
-          company: "陪护公司名称",
-          score: 5
-        },
-        {
-          id: 11,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "丁海",
-          sex: "女",
-          age: "21",
-          hospital: "赣州市人民医院新院区",
-          company: "陪护公司名称",
-          score: 5
-        },
-        {
-          id: 11,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "丁海",
-          sex: "女",
-          age: "21",
-          hospital: "赣州市人民医院新院区",
-          company: "陪护公司名称",
-          score: 5
-        }
+        
       ],
       physicianList: [
-        {
-          id: 11,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "丁海",
-          sex: "女",
-          age: "21",
-          company: "陪护公司名称",
-          evaluate: 98,
-          sales: 12
-        },
-        {
-          id: 11,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "丁海",
-          sex: "女",
-          age: "21",
-          company: "陪护公司名称",
-          evaluate: 98,
-          sales: 12
-        },
-        {
-          id: 11,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "丁海",
-          sex: "女",
-          age: "21",
-          company: "陪护公司名称",
-          evaluate: 98,
-          sales: 12
-        }
+        
       ],
-      departmentMenu: [
-        {
-          id: 1,
-          name: "妇产科&生殖中心"
-        },
-        {
-          id: 2,
-          name: "儿科"
-        },
-        {
-          id: 3,
-          name: "泌尿外科"
-        },
-        {
-          id: 4,
-          name: "皮肤性病科"
-        },
-        {
-          id: 5,
-          name: "骨科"
-        },
-        {
-          id: 6,
-          name: "内分泌科"
-        }
-      ],
+      departmentMenu: [],
       physicianMenu: [
         {
           id: 1,
@@ -402,58 +295,7 @@ export default {
       physicianMenuType: 0,
       healthMenuType: 0,
       hospitalList: [
-        {
-          id: 1,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "韩冬梅",
-          sex: "女",
-          level: "主治医师",
-          type: "妇产科&生殖中心",
-          address: "江西赣州市立医院",
-          goodAt: "骨性牙列不齐，各种正畸技术",
-          workTime: "12",
-          evaluate: "98"
-        },
-        {
-          id: 1,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "韩冬梅",
-          sex: "女",
-          level: "主治医师",
-          type: "妇产科&生殖中心",
-          address: "江西赣州市立医院",
-          goodAt: "骨性牙列不齐，各种正畸技术",
-          workTime: "12",
-          evaluate: "98"
-        },
-        {
-          id: 1,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "韩冬梅",
-          sex: "女",
-          level: "主治医师",
-          type: "妇产科&生殖中心",
-          address: "江西赣州市立医院",
-          goodAt: "骨性牙列不齐，各种正畸技术",
-          workTime: "12",
-          evaluate: "98"
-        },
-        {
-          id: 1,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "韩冬梅",
-          sex: "女",
-          level: "主治医师",
-          type: "妇产科&生殖中心",
-          address: "江西赣州市立医院",
-          goodAt: "骨性牙列不齐，各种正畸技术",
-          workTime: "12",
-          evaluate: "98"
-        }
+        
       ],
       healthList: [
         {
@@ -478,10 +320,43 @@ export default {
     "my-foot": Foot,
     "notice-list": Notice
   },
+  mounted() {
+    this.getHospital();
+    this.getDoctors();
+    this.getPzhglist();
+    this. getParamedical();
+    // this.getExclusive();
+  },
   methods: {
-    departmentMenuChange: function(index, id) {
+    departmentMenuChange: function(value) {
       var that = this;
-      that.departmentMenuType = index;
+      that.departmentMenuType = value;
+    },
+    getExclusive() {
+      this.post("/yiqi-api/api/health/SRDepartmentOne")
+        .then(res => {
+          this.departmentMenu = res.data;
+          if(res.data.length){
+            this.departmentMenuType = res.data[0].value
+          }
+        })
+        .catch(err => {});
+    },
+    getDoctors() {
+      this.post("/yiqi-api/api/health/SRDepartmentDoctor", {
+        departmentName: "儿科牙科"
+      })
+        .then(res => {
+          this.hospitalList = [] = res.data;
+        })
+        .catch(err => {});
+    },
+    getPzhglist() {
+      this.post("/yiqi-api/api/hg/pzhglist")
+        .then(res => {
+          this.nursingList = res.data;
+        })
+        .catch();
     },
     physicianMenuChange: function(index, id) {
       var that = this;
@@ -490,6 +365,23 @@ export default {
     healthMenuChange: function(index, id) {
       var that = this;
       that.healthMenuType = index;
+    },
+    getParamedical() {
+      // var v = {};
+      // v.servetyle = this.doctorType - 0 + 2;
+      this.post("/yiqi-api/api/health/MFDoctorlist")
+        .then(res => {
+          this.physicianList = res.data;
+          console.log(res);
+        })
+        .catch(err => {});
+    },
+    getHospital() {
+      this.post("/yiqi-api/api/health/Hospita", { orderbyTyope: 0 })
+        .then(res => {
+          this.doctorList = res.data;
+        })
+        .catch(err => {});
     }
   }
 };
@@ -652,6 +544,10 @@ img {
   height: 472px;
 }
 
+.doctor-list-main + .doctor-list-main {
+  margin-left: 15px;
+}
+
 .doctor-list-main img {
   width: 100%;
   height: 414px;
@@ -676,7 +572,7 @@ img {
 }
 
 .doctor-list-bottom p + p {
-  margin-top: 9;
+  margin-top: 9px;
   font-size: 12px;
   color: #999;
 }
@@ -851,43 +747,43 @@ img {
   white-space: nowrap;
 }
 
-  .drug-consult{
-  	margin-top: 50px;
-  }
-  
-  .notice-menu {
-    width: 130px;
-  }
-  
-  .notice-menu span {
-    width: 100%;
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
-    font-size: 16px;
-    color: #666;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .notice-menu span+span {
-    margin-top: 10px;
-  }
-  
-  .notice-menu span.on {
-    color: #fff;
-    background-color: #ff6736;
-  }
-  
-  .notice-menu span:hover {
-    color: #fff;
-    background-color: #ff6736;
-  }
-  
-  .notice-list {
-  	-webkit-flex: 1;
-  	flex: 1;
-  	min-width: 0;
-  	margin-left: 60px;
-  }
+.drug-consult {
+  margin-top: 50px;
+}
+
+.notice-menu {
+  width: 130px;
+}
+
+.notice-menu span {
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  font-size: 16px;
+  color: #666;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.notice-menu span + span {
+  margin-top: 10px;
+}
+
+.notice-menu span.on {
+  color: #fff;
+  background-color: #ff6736;
+}
+
+.notice-menu span:hover {
+  color: #fff;
+  background-color: #ff6736;
+}
+
+.notice-list {
+  -webkit-flex: 1;
+  flex: 1;
+  min-width: 0;
+  margin-left: 60px;
+}
 </style>

@@ -40,11 +40,11 @@
         <div class="nursing-main">
           <div class="nursing-main-title">
             <img src="../../../static/img/nurse-title-1.png">
-            <router-link to>更多医院陪诊 >></router-link>
+            <router-link :to="{path:'/nurse/list',query:{menu:2,type:'医院陪诊'}}">更多医院陪诊 >></router-link>
           </div>
-          <div class="nursing-list flex-between-start">
-            <div class="nursing-list-main" v-for="(item,index) in nursingList" :key="index">
-              <img :src="item.img">
+          <div class="nursing-list flex-start-start">
+            <router-link :to="{ path: '/nurse/detail', query: { id: item.id, menu:login.menu}}" class="nursing-list-main" v-for="(item,index) in nursingListData" :key="index">
+              <img :src="item.photo">
               <div class="nursing-list-bottom">
                 <div class="nursing-list-basic flex-start-start">
                   <span>{{item.name}}</span>
@@ -52,34 +52,35 @@
                   <span>{{item.age}}岁</span>
                 </div>
                 <p>所服务医院:
-                  <span>{{item.hospital}}</span>
+                  <span>{{item.hospitalname}}</span>
                 </p>
                 <p>陪护公司:
-                  <span>{{item.company}}</span>
+                  <span>{{item.companyname}}</span>
                 </p>
-                <p class="flex-start-center">
+                <!-- <p class="flex-start-center">
                   好评率:
                   <span>{{item.evaluate}}</span>
                   <img
                     v-for="(star , idx) in 5"
+                    :key="idx"
                     :src="item.score > idx ? '../../../static/img/star-on.png' : '../../../static/img/star-off.png'"
                   >
-                </p>
-                <div class="nursing-list-contact">
+                </p> -->
+                <div class="nursing-list-contact" @click.prevent="contactphone(item.phone)">
                   <span>联系公司</span>
                 </div>
               </div>
-            </div>
+            </router-link>
           </div>
         </div>
         <div class="nursing-main">
           <div class="nursing-main-title">
             <img src="../../../static/img/nurse-title-2.png">
-            <router-link to>更多家庭陪诊 >></router-link>
+            <router-link :to="{path:'/nurse/list',query:{menu:2,type:'家庭陪诊'}}">更多家庭陪诊 >></router-link>
           </div>
-          <div class="nursing-list flex-between-start">
-            <div class="nursing-list-main" v-for="(item,index) in nursingList">
-              <img :src="item.img">
+          <div class="nursing-list flex-start-start">
+            <router-link :to="{ path: '/nurse/detail', query: { id: item.id, menu:login.menu}}" class="nursing-list-main" v-for="(item,index) in nursingListData2" :key="index">
+              <img :src="item.photo">
               <div class="nursing-list-bottom">
                 <div class="nursing-list-basic flex-start-start">
                   <span>{{item.name}}</span>
@@ -87,34 +88,35 @@
                   <span>{{item.age}}岁</span>
                 </div>
                 <p>所服务医院:
-                  <span>{{item.hospital}}</span>
+                  <span>{{item.hospitalname}}</span>
                 </p>
                 <p>陪护公司:
-                  <span>{{item.company}}</span>
+                  <span>{{item.companyname}}</span>
                 </p>
-                <p class="flex-start-center">
+                <!-- <p class="flex-start-center">
                   好评率:
                   <span>{{item.evaluate}}</span>
                   <img
                     v-for="(star , idx) in 5"
+                    :key="idx"
                     :src="item.score > idx ? '../../../static/img/star-on.png' : '../../../static/img/star-off.png'"
                   >
-                </p>
-                <div class="nursing-list-contact">
+                </p> -->
+                <div class="nursing-list-contact" @click.prevent="contactphone(item.phone)">
                   <span>联系公司</span>
                 </div>
               </div>
-            </div>
+            </router-link>
           </div>
         </div>
         <div class="nursing-main">
           <div class="nursing-main-title">
             <img src="../../../static/img/nurse-title-3.png">
-            <router-link to>更多母婴陪诊 >></router-link>
+            <router-link :to="{path:'/nurse/list',query:{menu:2,type:'母婴陪诊'}}">更多母婴陪诊 >></router-link>
           </div>
-          <div class="nursing-list flex-between-start">
-            <div class="nursing-list-main" v-for="(item,index) in nursingList">
-              <img :src="item.img">
+          <div class="nursing-list flex-start-start">
+            <router-link :to="{ path: '/nurse/detail', query: { id: item.id, menu:login.menu}}" class="nursing-list-main" v-for="(item,index) in nursingListData3" :key="index">
+              <img :src="item.photo">
               <div class="nursing-list-bottom">
                 <div class="nursing-list-basic flex-start-start">
                   <span>{{item.name}}</span>
@@ -122,24 +124,25 @@
                   <span>{{item.age}}岁</span>
                 </div>
                 <p>所服务医院:
-                  <span>{{item.hospital}}</span>
+                  <span>{{item.hospitalname}}</span>
                 </p>
                 <p>陪护公司:
-                  <span>{{item.company}}</span>
+                  <span>{{item.companyname}}</span>
                 </p>
-                <p class="flex-start-center">
+                <!-- <p class="flex-start-center">
                   好评率:
                   <span>{{item.evaluate}}</span>
                   <img
                     v-for="(star , idx) in 5"
+                    :key="idx"
                     :src="item.score > idx ? '../../../static/img/star-on.png' : '../../../static/img/star-off.png'"
                   >
-                </p>
-                <div class="nursing-list-contact">
+                </p> -->
+                <div class="nursing-list-contact" @click.prevent="contactphone(item.phone)">
                   <span>联系公司</span>
                 </div>
               </div>
-            </div>
+            </router-link>
           </div>
         </div>
       </div>
@@ -213,52 +216,9 @@ export default {
             introduce: "免排队 方便快捷"
           }
       ],
-      nursingList: [
-        {
-          id: 11,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "丁海",
-          sex: "女",
-          age: "21",
-          hospital: "赣州市人民医院新院区",
-          company: "陪护公司名称",
-          score: 5
-        },
-        {
-          id: 11,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "丁海",
-          sex: "女",
-          age: "21",
-          hospital: "赣州市人民医院新院区",
-          company: "陪护公司名称",
-          score: 5
-        },
-        {
-          id: 11,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "丁海",
-          sex: "女",
-          age: "21",
-          hospital: "赣州市人民医院新院区",
-          company: "陪护公司名称",
-          score: 5
-        },
-        {
-          id: 11,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "丁海",
-          sex: "女",
-          age: "21",
-          hospital: "赣州市人民医院新院区",
-          company: "陪护公司名称",
-          score: 5
-        }
-      ]
+      nursingListData: [],
+      nursingListData2: [],
+      nursingListData3: []
     };
   },
   components: {
@@ -269,6 +229,9 @@ export default {
   },
   created() {
     this.getNursingBanner();
+    this.getnurse()
+    this.getnurse2()
+    this.getnurse3()
   },
   methods: {
     getNursingBanner() {
@@ -277,6 +240,96 @@ export default {
           this.nurseBanner = res.data;
         })
         .catch(err => {});
+    },
+    getnurse(){
+      var that = this;
+      var newform = {
+        age: "",
+        sex: "",
+        workey: "",
+        workstate: "",
+        servetime: "",
+        workage: "",
+        servehospitalname: "",
+        servetyle: "医院陪护"
+      }
+      this.post('yiqi-api/api/hg/hglist', newform)
+        .then(res => {
+          var i=0;
+          res.data.map(value => {
+            value.list.map(secondvalue => {
+              secondvalue.phone = value.cphone;
+              if(i<4){
+                that.nursingListData.push(secondvalue)
+              }
+              i++;
+            })
+          })
+          console.log(that.nursingList)
+        })
+        .catch(err => {
+        });
+    },
+    getnurse2(){
+      var that = this;
+      var newform = {
+        age: "",
+        sex: "",
+        workey: "",
+        workstate: "",
+        servetime: "",
+        workage: "",
+        servehospitalname: "",
+        servetyle: "家庭陪护"
+      }
+      this.post('yiqi-api/api/hg/hglist', newform)
+        .then(res => {
+          var i=0;
+          res.data.map(value => {
+            value.list.map(secondvalue => {
+              secondvalue.phone = value.cphone;
+              if(i<4){
+                that.nursingListData2.push(secondvalue)
+              }
+              i++;
+            })
+          })
+        })
+        .catch(err => {
+        });
+    },
+    getnurse3(){
+      var that = this;
+      var newform = {
+        age: "",
+        sex: "",
+        workey: "",
+        workstate: "",
+        servetime: "",
+        workage: "",
+        servehospitalname: "",
+        servetyle: "母婴陪护"
+      }
+      this.post('yiqi-api/api/hg/hglist', newform)
+        .then(res => {
+          var i=0;
+          res.data.map(value => {
+            value.list.map(secondvalue => {
+              secondvalue.phone = value.cphone;
+              if(i<4){
+                that.nursingListData3.push(secondvalue)
+              }
+              i++;
+            })
+          })
+        })
+        .catch(err => {
+        });
+    },
+    contactphone(val){
+      this.$alert('公司联系方式', val, {
+          confirmButtonText: '确定'
+        });
     }
   }
 };
@@ -421,6 +474,10 @@ img {
   width: 289px;
   height: 479px;
   border: solid 1px #f1f1f1;
+}
+
+.nursing-list-main+.nursing-list-main{
+  margin-left:14px;
 }
 
 .nursing-list-main img {

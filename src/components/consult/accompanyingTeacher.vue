@@ -17,13 +17,13 @@
                 :src="doctor.quality/ 100 * 5 >= it ? '../../../static/img/star-on.png' : '../../../static/img/star-off.png'"
               >
             </div> -->
-            <p>
+            <!-- <p>
               <span
                 class="follow"
                 :class="{on: doctor.isfocus === 0}"
                 @click="focusPz(doctor.id,doctor.isfocus === 0 ? 1 : 0)"
               >{{doctor.isfocus === 0 ? "已关注" : "关注"}}</span>
-            </p>
+            </p> -->
           </div>
           <div class="doctor-message">
             <div class="doctor-basice flex-start-center">
@@ -31,12 +31,12 @@
               <span>{{doctor.sex}}</span>
               <span>{{doctor.age}}岁</span>
               <span>{{doctor.leve}}</span>
-              <p class="flex-start-center">
+              <!-- <p class="flex-start-center">
                 <span
                   class="doctor-basice-state"
                   :class="{on : doctor.workstate === '空闲'}"
                 >{{doctor.workstate}}</span>
-              </p>
+              </p> -->
             </div>
             <div class="doctor-other">
               <p>
@@ -63,7 +63,7 @@
                 <span>服务价格：</span>
                 <span class="price">￥{{doctor.serverprice}}</span>
               </p> -->
-              <div class="doctor-other-amount flex-start-center">
+              <!-- <div class="doctor-other-amount flex-start-center">
                 <p>选择数量：</p>
                 <input type="number" v-model="amount" @change="amountChange">
               </div>
@@ -84,12 +84,12 @@
               <p>选择服务时间：</p>
               <div class="doctor-service-time">
                 <el-date-picker v-model="serviceDate" type="datetime" placeholder="选择日期时间"></el-date-picker>
-              </div>
+              </div> -->
             </div>
-            <div class="doctor-btn flex-start-start">
+            <!-- <div class="doctor-btn flex-start-start">
               <span>立即购买</span>
               <span @click="getCart(doctor.id,doctor.name,doctor.serverprice)">加入购物车</span>
-            </div>
+            </div> -->
           </div>
         </div>
         <!-- <div class="doctor-top-right">

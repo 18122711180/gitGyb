@@ -60,6 +60,12 @@ export default new Router({
         import('@/components/order/exchange') //我的订单-退换
     },
     {
+      path: '/order/cancle',
+      name: 'OrderCancle',
+      component: () =>
+        import('@/components/order/cancle') //我的订单-取消订单
+    },
+    {
       path: '/order/exchange/detail',
       name: 'OrderExchangeDetail',
       component: () =>
@@ -200,13 +206,13 @@ export default new Router({
       name: 'AccompanyingDetail',
       component: () =>
         import('@/components/consult/accompanyingDetail') //陪诊员详情页
-    }, 
+    },
     {
       path: '/accompanying/teacher',
       name: 'AccompanyingTeacher',
       component: () =>
         import('@/components/consult/accompanyingTeacher') //管理老师
-    }, 
+    },
     {
       path: '/accompanying/list',
       name: 'AccompanyingList',

@@ -15,17 +15,23 @@
             </div>
             <div class="state-main-right flex-start-center">
               <template v-if="!userInfo">
-                <p>请
+                <p>
+                  请
                   <router-link to="/login">登录</router-link>
                 </p>
                 <router-link to="/register">免费注册</router-link>
+                <span>|</span>
+                <span style="cursor: pointer;" @click="logintis">我的订单</span>
+                <span style="cursor: pointer;" @click="logintis">购物车</span>
               </template>
               <template v-else>
-                <router-link to="/register">{{userInfo.username}}</router-link>
+                <span @click="loginout" style="cursor: pointer;">{{userInfo.username}}</span>
+                <!-- <router-link to="/register"></router-link> -->
+                <span>|</span>
+                <router-link to="/order">我的订单</router-link>
+                <router-link to="/car">购物车</router-link>
               </template>
-              <span>|</span>
-              <router-link to="/order">我的订单</router-link>
-              <router-link to="/car">购物车</router-link>
+
               <router-link to="/foo">商家入驻</router-link>
               <router-link to="/foo">客户服务</router-link>
             </div>
@@ -34,18 +40,14 @@
       </div>
       <div class="head-second-bg">
         <div class="flex-between-center head-second">
-          <img class="head-logo" src="../../../static/img/logo.png">
+          <img class="head-logo" src="../../../static/img/logo.png" />
           <div class="head-search flex-start-center">
-            <img src="../../../static/img/icon-search.png">
-            <input
-              v-model="searchVal"
-              @focus="switchover"
-              placeholder="请输入保健食品、医疗器械、药品"
-            >
-              <!-- placeholder="请输入医院、名师、专业陪诊、医生、护工、保健食品、药品" -->
+            <img src="../../../static/img/icon-search.png" />
+            <input v-model="searchVal" @focus="switchover" placeholder="请输入保健食品、医疗器械、药品" />
+            <!-- placeholder="请输入医院、名师、专业陪诊、医生、护工、保健食品、药品" -->
             <span @click="search">搜索</span>
           </div>
-          <img class="head-ad" src="../../../static/img/jz.png">
+          <img class="head-ad" src="../../../static/img/jz.png" />
         </div>
       </div>
       <div class="head-menu" v-if="!login.orderShow">
@@ -88,6 +90,7 @@
 
 <script>
 import placeJs from "../../../static/js/place.js";
+import { setInfo, setPlace, getPlace } from "@/utils/auth";
 // const axios = require('axios');
 import { mapGetters } from "vuex";
 export default {
@@ -193,6 +196,12 @@ export default {
       areaName: [] //省市区名字
     };
   },
+  mounted() {
+    let place = getPlace();
+    if (!!place && typeof place != "undefined") {
+      this.areaName = place;
+    }
+  },
   methods: {
     switchover() {
       console.log(this.$route);
@@ -205,13 +214,17 @@ export default {
     handleChange: function(item) {
       var that = this;
       that.areaName = that.palceSelect(item);
+      setPlace(that.areaName);
+    },
+    logintis(){
+      this.$message.error("请先登录");
     },
     search() {
-      if(this.searchVal !== ''){
-        this.$emit('searchCentent',this.searchVal);
-      }else{
+      if (this.searchVal !== "") {
+        this.$emit("searchCentent", this.searchVal);
+      } else {
         this.$message.closeAll();
-        this.$message.error("搜索条件不能为空！")
+        this.$message.error("搜索条件不能为空！");
       }
 
       // var that = this;
@@ -261,6 +274,29 @@ export default {
           }
         }
       }
+    },
+    loginout() {
+      var that = this;
+      that
+        .$confirm("是否退出登录", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+        .then(() => {
+          that.$message({
+            type: "success",
+            message: "退出成功!"
+          });
+          setInfo("");
+          that.$router.push({ path: "/login" });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     }
   }
 };

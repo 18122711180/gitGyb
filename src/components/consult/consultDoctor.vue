@@ -6,7 +6,7 @@
         <span class="doctor-type-title">分类：</span>
         <div class="flex-start-start doctor-type-main">
           <!-- <span :class="{ on : doctorType == 1}" @click="doctorType = 1">全部</span> -->
-          <span :class="{ on : doctorType == 2}" @click="doctorType = 2">临床名医</span>
+          <span :class="{ on : doctorType == 2}" @click="doctorType = 2, getExclusive()">临床名医</span>
           <span :class="{ on : doctorType == 3}" @click="doctorType = 3,getPharmacist()">临床药师</span>
         </div>
       </div>
@@ -18,7 +18,7 @@
               v-for="(item,index) in department"
               :key="index"
               :class="{ on : departmentType == item.value}"
-              @click="departmentType = item.value,getDoctors(item.value)"
+              @click="departmentType = item.value,getdepartment2()"
             >{{item.value}}</span>
             <!-- <span :class="{ on : departmentType == 1}" @click="departmentType = 1">外科</span>
             <span :class="{ on : departmentType == 2}" @click="departmentType = 2">专科</span>
@@ -26,10 +26,11 @@
           </div>
           <div class="flex-start-start flex-wrap">
             <span
-              v-for="item in departmentList"
-              :class="{ on : departmentListType == item.id}"
-              @click="departmentListType = item.id"
-            >{{item.name}}</span>
+              v-for="(item, index) in departmentList"
+              :key="index"
+              :class="{ on : departmentListType == item.value}"
+              @click="departmentListType = item.value"
+            >{{item.value}}</span>
           </div>
         </div>
       </div>
@@ -143,20 +144,20 @@ export default {
         // }
       ],
       doctorList: [
-        {
-          id: 1,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "韩冬梅",
-          sex: "女",
-          level: "主治医师",
-          type: "妇产科&生殖中心",
-          address: "江西赣州市立医院",
-          goodAt: "骨性牙列不齐，各种正畸技术",
-          workTime: "12",
-          evaluate: "98",
-          state: false
-        }
+        // {
+        //   id: 1,
+        //   img:
+        //     "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
+        //   name: "韩冬梅",
+        //   sex: "女",
+        //   level: "主治医师",
+        //   type: "妇产科&生殖中心",
+        //   address: "江西赣州市立医院",
+        //   goodAt: "骨性牙列不齐，各种正畸技术",
+        //   workTime: "12",
+        //   evaluate: "98",
+        //   state: false
+        // }
       ]
     };
   },
@@ -175,23 +176,36 @@ export default {
   },
   methods: {
     getExclusive() {
-      this.post("/yiqi-api/api/health/SRDepartment")
+      this.post("/yiqi-api/api/health/SRDepartmentOne")
         .then(res => {
           console.log(res);
           this.department = res.data;
           if (res.data.length > 0) {
             this.departmentType = res.data[0].value;
-            this.getDoctors(this.departmentType);
+            this.getdepartment2();
           }
         })
         .catch(err => {});
     },
-    getDoctors(departmentType) {
-      this.post("/yiqi-api/api/health/SRDepartmentDoctor", {
-        departmentName: departmentType
+    getdepartment2(){
+      this.post("/yiqi-api/api/health/SRDepartment", {
+        key: this.departmentType
       })
         .then(res => {
           console.log(res);
+          this.departmentList = res.data;
+          if (res.data.length > 0) {
+            this.departmentListType = res.data[0].value;
+            this.getDoctors();
+          }
+        })
+        .catch(err => {});
+    },
+    getDoctors() {
+      this.post("/yiqi-api/api/health/SRDepartmentDoctor", {
+        departmentName: this.departmentListType
+      })
+        .then(res => {
           this.doctorList = [] = res.data;
         })
         .catch(err => {});
@@ -200,6 +214,7 @@ export default {
       this.post("/yiqi-api/api/health/LCpharmacist")
         .then(res => {
           this.doctorList = [] = res.data;
+          console.log("药师",res.data)
         })
         .catch(err => {});
     },
@@ -289,6 +304,7 @@ section {
 .float-doctor-message {
   padding: 30px 20px;
   border-top: solid 1px #f1f1f1;
+  cursor: pointer;
 }
 
 .float-doctor-message-left img {

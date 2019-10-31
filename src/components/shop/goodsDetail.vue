@@ -50,12 +50,12 @@
             </div>
           </div>
         </div>
-        <div class="doctor-top-right">
+        <!-- <div class="doctor-top-right">
           <img :src="doctorData.storeimage">
           <p>{{doctorData.storename}}</p>
-          <!-- <p><span>联系电话：</span>{{doctorData.tel}}</p>
-          <p><span>详细地址：</span>{{doctorData.address}}</p>-->
-        </div>
+          <p><span>联系电话：</span>{{doctorData.tel}}</p>
+          <p><span>详细地址：</span>{{doctorData.address}}</p>
+        </div> -->
       </div>
       <div class="doctor-bottom">
         <div class="doctor-bottom-title flex-start-start">
@@ -128,6 +128,7 @@
 import Head from "../public/allHead.vue";
 import Float from "../public/rightFloat.vue";
 import Foot from "../public/allFoot.vue";
+import { setOrder } from "@/utils/auth";
 import { mapGetters } from "vuex";
 export default {
   name: "goodsDetail",
@@ -234,7 +235,8 @@ export default {
           this.post("/yiqi-api/api/shop/shopbuy", cartData)
             .then(res => {
               if (res.code === 0) {
-                this.$router.push({path:'/car/order',query:{shoptype:res.data.shoptype,id:res.data.id}})
+                // this.$router.push({path:'/car/order',query:{shoptype:res.data.shoptype,id:res.data.id}})
+                this.order2(res.data.id, res.data.shoptype);
               }
             })
             .catch(err => {});
@@ -243,6 +245,25 @@ export default {
         this.$message.closeAll();
         this.$message.warning("请先登陆！");
       }
+    },
+    order2(infoId, shoptype) {
+      var that = this;
+      var formData = {
+        infoId: infoId,
+        shoptype: shoptype,
+        token: this.userInfo.token
+      };
+      this.post("/yiqi-api/api/Server/getservic", formData)
+        .then(res => {
+          setOrder(res.data);
+          this.$router.push({
+            path: "/car/order",
+            query: { id: this.$route.query.id }
+          });
+        })
+        .catch(err => {
+          this.$message.error(err);
+        });
     },
     // 添加购物车
     addCart(doctorData) {
@@ -298,6 +319,7 @@ export default {
       that.goodsImgType = index;
       that.doctor.img = that.doctor.imgList[index];
     }
+
   }
 };
 </script>

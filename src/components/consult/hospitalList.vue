@@ -74,7 +74,7 @@ export default {
       login: {
         state: true,
         name: "hhy",
-        menu: 0,
+        menu: 1,
         searchShow: false,
         url: this.url
       },
@@ -93,50 +93,9 @@ export default {
         "一级甲等",
         "一级乙等",
         "一级丙等",
-        "无限"
+        "不限"
       ],
-      hospitalLists: [
-        {
-          id: 1,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "赣州市人民医院 北院（老院）",
-          address: "章贡区红旗大道17号",
-          tel: "0755-5889088",
-          type: "特色",
-          introduce: "中医儿科、神经内科、脊椎外科中医儿科、神经内科、脊椎外科"
-        },
-        {
-          id: 1,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "赣州市人民医院 北院（老院）",
-          address: "章贡区红旗大道17号",
-          tel: "0755-5889088",
-          type: "特色",
-          introduce: "中医儿科、神经内科、脊椎外科中医儿科、神经内科、脊椎外科"
-        },
-        {
-          id: 1,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "赣州市人民医院 北院（老院）",
-          address: "章贡区红旗大道17号",
-          tel: "0755-5889088",
-          type: "特色",
-          introduce: "中医儿科、神经内科、脊椎外科中医儿科、神经内科、脊椎外科"
-        },
-        {
-          id: 1,
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3696080265,4026547851&fm=26&gp=0.jpg",
-          name: "赣州市人民医院 北院（老院）",
-          address: "章贡区红旗大道17号",
-          tel: "0755-5889088",
-          type: "特色",
-          introduce: "中医儿科、神经内科、脊椎外科中医儿科、神经内科、脊椎外科"
-        }
-      ]
+      hospitalLists: []
     };
   },
   components: {

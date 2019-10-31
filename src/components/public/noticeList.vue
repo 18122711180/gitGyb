@@ -1,9 +1,9 @@
 <template>
   <div id="noticeList">
     <div class="notice-list" v-for="(item , index) in news.list" :key="index">
-      <router-link
+      <a
         class="flex-start-start"
-        :to="{ path: '/consult/detail', query: { id: item.id , menu: 6}}"
+        :href="item.turl"
       >
         <img class="notice-list-left" :src="item.imgsrc">
         <div class="notice-list-right flex-between-start flex-column">
@@ -27,7 +27,7 @@
             </div>
           </div>
         </div>
-      </router-link>
+      </a>
     </div>
     <div class="search-page flex-center-start">
       <el-pagination

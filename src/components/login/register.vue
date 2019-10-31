@@ -14,13 +14,13 @@
         <div class="login-left-main">
           <el-form ref="form" :model="form" label-width="90px">
             <el-form-item class="login-left-input" label="手机号码：">
-              <el-input ref="tel" v-model="form.tel" placeholder="请输入手机号"></el-input>
+              <el-input ref="tel" v-model="form.tel" auto-complete="new-accounts" placeholder="请输入手机号"></el-input>
             </el-form-item>
-            <el-form-item class="login-left-input" label="输入密码：">
+            <el-form-item class="login-left-input" auto-complete="new-password" label="输入密码：">
               <el-input v-model="form.psd" placeholder="请输入密码" show-password></el-input>
             </el-form-item>
             <el-form-item class="login-left-input" label="确认密码：">
-              <el-input v-model="form.psdSure" placeholder="再次输入密码" show-password></el-input>
+              <el-input v-model="form.psdSure" auto-complete="new-password" placeholder="再次输入密码" show-password></el-input>
             </el-form-item>
             <div class="flex-start-start login-left-code">
               <el-form-item class="login-left-input" label="验证码：">

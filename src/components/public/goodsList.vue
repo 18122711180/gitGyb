@@ -3,12 +3,12 @@
     <div class="shop-goods-list flex-start-start flex-wrap">
       <router-link :to="({path:'/goods/detail',query:{id:item.pid,menu:5}})" v-for="(item,index) in list" :key="index">
         <div class="shop-goods-list-img flex-center-center">
-          <img :src="item.imageurl1" />
+          <img :src="item.showimg" />
         </div>
         <div class="shop-goods-list-message">
-          <p class="omit">{{item.publicname}}</p>
+          <p class="omit">{{item.shopname}}</p>
           <div class="flex-between-center">
-            <span >￥{{item.drugprice}}</span>
+            <span >￥{{item.shopprice}}</span>
             <!-- <span v-if="item.costprice" class="original-price">￥{{item.costprice}}</span> -->
             <!-- <span>已售：{{item.amount}}件</span> -->
           </div>

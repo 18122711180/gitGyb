@@ -41,7 +41,7 @@
             <div class="login-left-input">
               <span class="login-left-submit" @click="loginBtn">登录</span>
             </div>
-            <div class="login-left-other flex-center-center">
+            <div class="login-left-other flex-center-center" v-if="false">
               <img src="../../../static/img/login-wx.png">
               <img src="../../../static/img/login-qq.png">
             </div>

@@ -1,7 +1,7 @@
 <template>
 	<div id="loginHead">
 		<div class="head flex-start-center">
-			<img src="../../../static/img/logo.png"/>
+			<img @click="backhome" src="../../../static/img/logo.png"/>
 			<div>
 				<p>用户中心</p>
 				<p>www.xxxxxxxxx.com</p>
@@ -12,7 +12,12 @@
 
 <script>
 	export default {
-    	name: 'loginHead'
+		name: 'loginHead',
+		methods: {
+			backhome(){
+				this.$router.push("/");
+			}
+		}
 	}
 </script>
 
@@ -30,7 +35,8 @@
 	
 	.head img{
 		width: 180px;
-		margin: 0 40px 0 20px
+		margin: 0 40px 0 20px;
+		cursor: pointer;
 	}
 	
 	.head div{

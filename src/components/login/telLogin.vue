@@ -32,13 +32,13 @@
               <el-form-item class="login-left-input" label="验证码：">
                 <el-input v-model="form.code" placeholder="输入验证码"></el-input>
               </el-form-item>
-              <span v-if="!timeStart" class="get-code" @click="getCode">获取验证码</span>
+              <span v-if="!timeStart" style="cursor: pointer;" class="get-code" @click="getCode">获取验证码</span>
               <span v-else class="get-code">{{time}}</span>
             </div>
             <div class="login-left-checked flex-start-start">
               <div class="login-left-empty"></div>
               <div class="login-left-submit">
-                <span @click="telLoginBtn">立即登录</span>
+                <span style="cursor: pointer;" @click="telLoginBtn">立即登录</span>
               </div>
             </div>
           </el-form>
@@ -96,10 +96,10 @@ export default {
         this.$message.error("效验码错误");
         return;
       };
-      if (this.form.code != this.code) {
-        this.$message.error("验证码错误");
-        return false;
-      }
+      // if (this.form.code != this.code) {
+      //   this.$message.error("验证码错误");
+      //   return false;
+      // }
       this.$store.dispatch("user/telLogin", this.form).then(res=>{
         this.$router.push({ path: "/" });
       }).catch(err=>{
@@ -127,6 +127,10 @@ export default {
       })
         .then(res => {
           this.code = res.msg;
+          this.$message({
+            type: "success",
+            message: "发送成功"
+          });
           console.log('this.code = ' +this.code)
           console.log(res)
         })
